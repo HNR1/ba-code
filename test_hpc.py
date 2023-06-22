@@ -5,8 +5,8 @@ import pytorch_fid.src.fid.fid_score as fid_score
 from time import time
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-pipe = DiffusionPipeline.from_pretrained("/gpfs/project/hebal100/bachelorarbeit/pipelines/SD-v1-5")
-pipeline = pipe.to(device)
+pipeline = DiffusionPipeline.from_pretrained("/gpfs/project/hebal100/bachelorarbeit/pipelines/SD-v1-5")
+pipeline.to(device)
 pipeline.enable_attention_slicing()
 
 prompt = "photograph of an astronaut riding a horse"
