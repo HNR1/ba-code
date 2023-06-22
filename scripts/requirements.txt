@@ -1,0 +1,9 @@
+numpy
+Pillow
+scipy
+pytorch
+torchvision
+transformers
+diffusers
+accelerate
+tqdm
