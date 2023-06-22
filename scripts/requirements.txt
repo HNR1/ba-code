@@ -1,7 +1,6 @@
 numpy
 Pillow
 scipy
-#pytorch
 torchvision
 transformers
 diffusers
