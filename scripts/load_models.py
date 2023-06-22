@@ -8,7 +8,7 @@ model_id = sys.argv[1]
 pipeline = DiffusionPipeline.from_pretrained(model_id)
 
 # Save files to a specified directory
-pipeline_path = "/Users/henri/Info/bachelorarbeit/pipelines/"+sys.argv[2]
+pipeline_path = "/Users/henri/Info/ba-code/pipelines/"+sys.argv[2]
 pipeline.save_pretrained(pipeline_path)
 
 
