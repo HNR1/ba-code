@@ -5,7 +5,7 @@ import pytorch_fid.src.fid.fid_score as fid_score
 from time import time
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-pipeline = DiffusionPipeline.from_pretrained("/gpfs/project/hebal100/bachelorarbeit/pipelines/SD-v1-5")
+pipeline = DiffusionPipeline.from_pretrained("/gpfs/project/hebal100/ba-code/pipelines/SD-v1-5")
 pipeline.to(device)
 pipeline.enable_attention_slicing()
 
