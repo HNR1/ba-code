@@ -4,6 +4,7 @@ from tomesd import tomesd
 from pytorch_fid.src.fid.fid_score import calc_fid_given_lists
 from time import time
 
+assert torch.cuda.is_available()
 pipeline = DiffusionPipeline.from_pretrained("/gpfs/project/hebal100/ba-code/pipelines/SD-v1-5").to('cuda')
 pipeline.enable_attention_slicing()
 
