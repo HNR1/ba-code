@@ -8,3 +8,4 @@ diffusers
 accelerate
 tqdm
 #urllib3<2.0
+cudatoolkit>=11
