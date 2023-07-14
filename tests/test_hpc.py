@@ -1,7 +1,9 @@
+import sys       
+sys.path.insert(1, '/gpfs/project/hebal100/ba-code/libs')
 from diffusers import DiffusionPipeline
 import torch
-from libs.tomesd import tomesd
-from libs.pytorch_fid.src.fid.fid_score import calc_fid_given_lists
+from tomesd import tomesd
+from pytorch_fid.src.fid.fid_score import calc_fid_given_lists
 
 assert torch.cuda.is_available()
 pipeline = DiffusionPipeline.from_pretrained("/gpfs/project/hebal100/ba-code/pipelines/SD-v1-5").to('cuda')
