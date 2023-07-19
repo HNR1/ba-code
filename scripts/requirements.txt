@@ -2,9 +2,7 @@ numpy<1.20
 Pillow
 scipy
 torchvision==0.14
-#torch==2.0.1
 transformers
 diffusers
 accelerate
 tqdm
-#urllib3<2.0
