@@ -5,4 +5,5 @@ torchvision==0.14
 transformers
 diffusers
 accelerate
+datasets
 tqdm
