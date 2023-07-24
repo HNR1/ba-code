@@ -7,3 +7,4 @@ diffusers
 accelerate
 datasets
 tqdm
+tomesd
