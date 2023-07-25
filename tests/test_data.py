@@ -12,7 +12,7 @@ def dummy(images, **kwargs):
 pipeline.safety_checker = dummy
 
 all_prompts = pd.read_csv('data/prompts.csv')['colummn'].values
-sample_size = 2
+sample_size = 5
 idcs = np.random.randint(0, len(all_prompts), sample_size)
 prompts = all_prompts[idcs]
 seeds = np.random.randint(0, 4294967295, len(prompts))
@@ -41,7 +41,7 @@ def gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger):
         end = time.time()
         diff_time = end - start
         name = 'img_' + ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        #image.save(f"/gpfs/scratch/hebal100/test/test1/{dir}/{name}.png")
+        image.save(f'/gpfs/scratch/hebal100/test/test2/{dir}/{name}.png')
         logger.append([prompt, seed, m_vol, diff_time, name])
 
 merge_volumes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
@@ -54,4 +54,4 @@ tomesd.remove_patch(pipeline)
 
 log = pd.DataFrame(logger, columns=['prompt', 'seed', 'm_vol', 'time', 'name'])
 name = 'log_' + ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-log.to_csv(f'/gpfs/scratch/hebal100/test/test1/logger/{name}.csv', index=False)
+log.to_csv(f'/gpfs/scratch/hebal100/test/test2/logger/{name}.csv', index=False)
