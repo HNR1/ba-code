@@ -12,4 +12,4 @@ cd /gpfs/project/hebal100/ba-code
 
 python -m pip install --user -r scripts/requirements.txt
 
-python tests/test_data.py 'test/test3' 10 768 768
+python src/gen_imgs.py 'test/test3' 10 768 768
