@@ -3,11 +3,13 @@ sys.path.insert(1, '/gpfs/project/hebal100/ba-code')
 from diffusers import DiffusionPipeline
 import torch, time, random, string, tomesd, numpy as np, pandas as pd
 
+# save command line args
 assert len(sys.argv) >= 5
 MAIN_DIR = sys.argv[1] #'data/run1_768x768'
-sample_size = sys.argv[2] #50
-x, y =  sys.argv[3], sys.argv[4] #768, 768
+sample_size = int(sys.argv[2]) #50
+x, y =  int(sys.argv[3]), int(sys.argv[4]) #768, 768
 
+# build pipeline
 assert torch.cuda.is_available()
 pipeline = DiffusionPipeline.from_pretrained('pipelines/SD-v1-5').to('cuda')
 pipeline.enable_attention_slicing()
@@ -16,14 +18,13 @@ def dummy(images, **kwargs):
     return images, [False]
 pipeline.safety_checker = dummy
 
+# load prompts and generate seeds
 all_prompts = pd.read_csv('data/prompts.csv')['colummn'].values
 idcs = np.random.randint(0, len(all_prompts), sample_size)
 prompts = all_prompts[idcs]
 seeds = np.random.randint(0, 4294967295, len(prompts))
 
-num_imgs = sample_size
-images = []
-
+# method for cutting oversized prompts
 def cut_prompt(prompt, max_len=300, char=','):
     if len(prompt) <= max_len:
         return prompt
@@ -35,6 +36,7 @@ def cut_prompt(prompt, max_len=300, char=','):
 
     return prompt[:idx]
 
+# generate images
 def gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger):    
     tomesd.apply_patch(pipeline, m_vol)
     for i in range(num_imgs):
@@ -52,9 +54,10 @@ directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', '
 logger = []
 
 for m_vol, dir in zip(merge_volumes, directories):
-    gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger)
+    gen_loop(pipeline, prompts, seeds, x, y, m_vol, sample_size, dir, logger)
 tomesd.remove_patch(pipeline)
 
+# save log
 log = pd.DataFrame(logger, columns=['prompt', 'seed', 'm_vol', 'time', 'name'])
 name = 'log_' + ''.join(random.choices(string.ascii_letters + string.digits, k=5))
 log.to_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/{name}.csv', index=False)
