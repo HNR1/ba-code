@@ -5,9 +5,10 @@ import torch, time, random, string, tomesd, numpy as np, pandas as pd
 
 # save command line args
 assert len(sys.argv) >= 5
-MAIN_DIR = sys.argv[1] #'data/run1_768x768'
-sample_size = int(sys.argv[2]) #50
-x, y =  int(sys.argv[3]), int(sys.argv[4]) #768, 768
+MAIN_DIR = sys.argv[1]                      #'data/run1_768x768'
+sample_size = int(sys.argv[2])              # 50
+x, y =  int(sys.argv[3]), int(sys.argv[4])  # 768, 768
+src_file = sys.argv[5]                      #'run2_768x768/log_a5f7c.csv'
 
 # build pipeline
 assert torch.cuda.is_available()
@@ -23,6 +24,11 @@ all_prompts = pd.read_csv('data/prompts.csv')['colummn'].values
 idcs = np.random.randint(0, len(all_prompts), sample_size)
 prompts = all_prompts[idcs]
 seeds = np.random.randint(0, 4294967295, len(prompts))
+
+# if true load prompts and seeds from previous run
+if src_file != None:
+    prompts = pd.read_csv(f'/gpfs/scratch/hebal100/data/{src_file}')['prompt'].values
+    seeds = pd.read_csv(f'/gpfs/scratch/hebal100/data/{src_file}')['seed'].values
 
 # method for cutting oversized prompts
 def cut_prompt(prompt, max_len=300, char=','):
@@ -45,8 +51,10 @@ def gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger):
         image = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed)).images[0]
         end = time.time()
         diff_time = end - start
+
         name = 'img_' + ''.join(random.choices(string.ascii_letters + string.digits, k=10))
         image.save(f'/gpfs/scratch/hebal100/{MAIN_DIR}/{dir}/{name}.png')
+        # create new log entry
         logger.append([prompt, seed, m_vol, diff_time, name])
 
 merge_volumes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
@@ -60,4 +68,4 @@ tomesd.remove_patch(pipeline)
 # save log
 log = pd.DataFrame(logger, columns=['prompt', 'seed', 'm_vol', 'time', 'name'])
 name = 'log_' + ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-log.to_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/{name}.csv', index=False)
+log.to_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/logger/{name}.csv', index=False)
