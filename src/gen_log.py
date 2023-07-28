@@ -10,5 +10,4 @@ logs = pd.read_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/logger/{files[0]}')
 for file in files[1:]:
     logs = pd.concat([logs, file], ignore_index=True)
 
-log = pd.DataFrame(logs, columns=['prompt', 'seed', 'm_vol', 'time', 'name'])
-log.to_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/img_log.csv', index=False)
+logs.to_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/img_log.csv', index=False)
