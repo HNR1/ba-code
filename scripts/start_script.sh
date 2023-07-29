@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -l select=1:ncpus=1:mem=20gb:ngpus=1:accelerator_model=gtx1080ti 
+#PBS -l select=1:ncpus=1:mem=15gb:ngpus=1:accelerator_model=gtx1080ti 
 #PBS -l walltime=07:59:00
 #PBS -A "SDwithToMe"
 set -e
