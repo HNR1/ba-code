@@ -13,5 +13,5 @@ for dir in directories:
     fid_values.append(fid)
 
 fid_log = pd.DataFrame(fid_values, columns=['fid'])
-fid_log.to_csv(f'{PATH}/fid_log.csv', index=False)
+fid_log.to_csv(f'/gpfs/scratch/hebal100/{PATH}/fid_log.csv', index=False)
 

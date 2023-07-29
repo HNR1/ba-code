@@ -13,4 +13,4 @@ for v in m_vols:
     time_values.append([v, t])
 
 time_log = pd.DataFrame(time_values, columns=['m_vol', 'time'])
-time_log.to_csv(f'{PATH}/time_log.csv', index=False)
+time_log.to_csv(f'/gpfs/scratch/hebal100/{PATH}/time_log.csv', index=False)
