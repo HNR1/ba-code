@@ -8,25 +8,16 @@ assert len(sys.argv) >= 5
 MAIN_DIR = sys.argv[1]                      #'data/run1_768x768'
 sample_size = int(sys.argv[2])              # 50
 x, y =  int(sys.argv[3]), int(sys.argv[4])  # 768, 768
-src_file = sys.argv[5]                      #'run2_768x768/log_a5f7c.csv'
-
-# build pipeline
-assert torch.cuda.is_available()
-pipeline = DiffusionPipeline.from_pretrained('pipelines/SD-v1-5').to('cuda')
-pipeline.enable_attention_slicing()
-# disable safety checker
-def dummy(images, **kwargs):
-    return images, [False]
-pipeline.safety_checker = dummy
+src_file = sys.argv[5]                      #'run2_768x768/logger/log_a5f7c.csv'
 
 # load prompts and generate seeds
-all_prompts = pd.read_csv('data/prompts.csv')['colummn'].values
-idcs = np.random.randint(0, len(all_prompts), sample_size)
-prompts = all_prompts[idcs]
-seeds = np.random.randint(0, 4294967295, len(prompts))
-
-# if true load prompts and seeds from previous run
-if src_file != None:
+if src_file == None:
+    all_prompts = pd.read_csv('data/prompts.csv')['colummn'].values
+    idcs = np.random.randint(0, len(all_prompts), sample_size)
+    prompts = all_prompts[idcs]
+    seeds = np.random.randint(0, 4294967295, len(prompts))
+# load prompts and seeds from previous run
+else:
     prompts = pd.read_csv(f'/gpfs/scratch/hebal100/data/{src_file}')['prompt'].values
     seeds = pd.read_csv(f'/gpfs/scratch/hebal100/data/{src_file}')['seed'].values
 
@@ -42,9 +33,18 @@ def cut_prompt(prompt, max_len=300, char=','):
 
     return prompt[:idx]
 
+# build pipeline
+assert torch.cuda.is_available()
+pipeline = DiffusionPipeline.from_pretrained('pipelines/SD-v1-5').to('cuda')
+pipeline.enable_attention_slicing()
+# disable safety checker
+def dummy(images, **kwargs):
+    return images, [False]
+pipeline.safety_checker = dummy
+
 # generate images
 def gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger):    
-    tomesd.apply_patch(pipeline, m_vol)
+    tomesd.apply_patch(pipeline, m_vol, merge_attn=True, merge_crossattn=True, merge_mlp=True)
     for i in range(num_imgs):
         prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
         start = time.time()
