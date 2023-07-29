@@ -12,4 +12,4 @@ cd /gpfs/project/hebal100/ba-code
 
 python -m pip install --user -r scripts/requirements.txt
 
-python src/gen_log.py 'data/run2_768x768'
+python src/logging/gen_img_log.py 'data/run2_768x768'
