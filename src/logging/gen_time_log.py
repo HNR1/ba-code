@@ -7,7 +7,7 @@ m_vols = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 time_values = []
 
 for v in m_vols:
-    df = pd.read_csv(f'/gpfs/scratch/hebal100/{PATH}/logger/log_{v}.csv')
+    df = pd.read_csv(f'/gpfs/scratch/hebal100/{PATH}/img_log.csv')
     df = df[df.m_vol == v]
     t = df['time'].values.mean()
     time_values.append([v, t])
