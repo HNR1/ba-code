@@ -2,7 +2,6 @@ import sys
 import pandas as pd
 
 PATH = sys.argv[1] #'data/run2_768x768'
-directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50', 'images_60']
 m_vols = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 time_values = []
 
