@@ -8,7 +8,7 @@ assert len(sys.argv) >= 5
 MAIN_DIR = sys.argv[1]                      #'data/run5'
 sample_size = int(sys.argv[2])              # 50
 x, y =  int(sys.argv[3]), int(sys.argv[4])  # 768, 768
-src_file = sys.argv[5]                      #'run2_768x768/logger/log_a5f7c.csv'
+src_file = sys.argv[5]                      #'run2/logger/log_a5f7c.csv'
 
 # load prompts and generate seeds
 if src_file == None:
@@ -44,7 +44,7 @@ pipeline.safety_checker = dummy
 
 # generate images
 def gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger):    
-    tomesd.apply_patch(pipeline, m_vol, merge_attn=True, merge_crossattn=False, merge_mlp=True)
+    tomesd.apply_patch(pipeline, m_vol, merge_attn=False, merge_crossattn=True, merge_mlp=True)
     for i in range(num_imgs):
         prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
         start = time.time()
