@@ -12,4 +12,4 @@ cd /gpfs/project/hebal100/ba-code
 
 python -m pip install --user -r scripts/requirements.txt
 
-python src/fixing/remove_dataset.py 'data/run6' 'data/run6/temp'
+python src/fixing/remove_dataset.py
