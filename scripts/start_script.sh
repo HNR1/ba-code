@@ -12,5 +12,5 @@ cd /gpfs/project/hebal100/ba-code
 
 python -m pip install --user -r scripts/requirements.txt
 
-python src/gen_imgs.py 'data/run6' 50 768 768 'run2/logger/log_Qs4eF.csv'
+python src/gen_imgs.py 'data/run6' 50 768 768 'run2/logger/log_jVDzd.csv'
 
