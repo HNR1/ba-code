@@ -1,9 +1,9 @@
 import pandas as pd
 
-MAIN_DIR = 'data/run4'
-files = ['log_6qrnm.csv', 'log_GhKAc.csv', 'log_HA0qr.csv', 'log_np6I8.csv', 
-         'log_uC7tx.csv', 'log_dxoHq.csv', 'log_gr9JS.csv',  
-         'log_lCvWs.csv', 'log_sOMGN.csv', 'log_zNTjN.csv']
+MAIN_DIR = 'data/run6'
+files = ['log_0OI2J.csv', 'log_b8RLi.csv', 'log_F8hN7.csv', 'log_h0xPt.csv', 
+         'log_QBA0b.csv', 'log_8rN8I.csv', 'log_bXR2e.csv', 'log_GOU8i.csv', 
+         'log_pjxuw.csv', 'log_R9hB0.csv']
 
 logs = pd.read_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/logger/{files[0]}')
 for file in files[1:]:

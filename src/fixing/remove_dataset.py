@@ -9,7 +9,7 @@ directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', '
 
 for log in logs:
     for m_vol, dir in zip(merge_volumes, directories):
-        df = pd.read_csv(f'/gpfs/scratch/hebal100/{TEMP_DIR}/logger/{log}')
+        df = pd.read_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/logger/{log}')
         df = df[df.m_vol == m_vol]
         names_list = df['name'].values
         for name in names_list:

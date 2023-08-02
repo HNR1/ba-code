@@ -44,7 +44,7 @@ pipeline.safety_checker = dummy
 
 # generate images
 def gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger):    
-    tomesd.apply_patch(pipeline, m_vol, merge_attn=False, merge_crossattn=True, merge_mlp=True)
+    tomesd.apply_patch(pipeline, m_vol, merge_attn=False, merge_crossattn=True, merge_mlp=False)
     for i in range(num_imgs):
         prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
         start = time.time()
