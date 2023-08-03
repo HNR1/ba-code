@@ -1,0 +1,27 @@
+\section{Background}
+Stable diffusion operates in the compressed latent spaces compared to older models operating in larger image spaces.
+
+\subsection{What are tokens?}
+In image synthesis a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer\cite{radford2021learning} which defines a token as an 8x8 block of pixels, so an 768x768 pixel image has \(96*96=9216\) tokens.
+
+\subsection{Stable Diffusion}
+Diffusion models, which are built from a hierarchy of
+denoising autoencoders. A neural network is trained to denoise images blurred with Gaussian noise by learning to reverse the diffusion process
+
+\subsubsection{Transformer Architecture}
+Text.
+
+\subsubsection{Attention and Self-Attention}
+Text.
+
+\subsubsection{Training?}
+Forward diffusion. Noise is added to an image. NN trained on it.
+
+\subsection{Frechet-Inception-Distance (FID)}
+PyTorch implementation \cite{Seitzer2020FID}
+
+\subsubsection{Inception Model}
+Text.
+
+\subsubsection{Caveats}
+Inception model is biased. Inception model compresses images to 299x299 pixels. FID inconsistent with ToMe applied (not exactly reproducable)

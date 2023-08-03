@@ -1,0 +1,36 @@
+\section{Experimental procedures}
+We perform several experiments using the model "stable-diffusion-v1-5" by runwayml\cite{Rombach_2022_CVPR} and applying different kinds of token merging to a set of prompts and measuring the performance.
+The performance is defined by\\ 
+\(1)\) speed: the average diffusion time for every image of the set and\\
+\(2)\) image quality: the FID-value between sets of images that had token merging applied and their counterparts (that is same prompt, seed and image size) that didn't use any token merging.
+
+\subsection{Setup}
+\subsubsection*{Software}
+The first iteration of the experiment was to compare how diffusion time and image quality change across a spectrum of different volume of tokens  removed while token merging is applied in different layers of the transformer (self-attention, cross-attention and mlp).\\
+The images were generated with a "DiffusionPipeline" from HuggingFace's diffusers library using the "stable-diffusion-v1-5" model\cite{Rombach_2022_CVPR}.\\
+We sampled a set of \(n=500\) prompts from the dataset "Gustavosta/Stable-Diffusion-Prompts" on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: "Lexica.art".\\
+Seven 768x768 images were created per prompt with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\% and 60\% merge applied respectively, creating a set of 3,500 images which can be split up into 7 subsets of 500 images each for every merge volume.\\
+This experiment was run multiple times with the merges applied in different layers of the transformer to compare performance.
+
+\subsubsection*{Hardware}
+All experminents were conducted on Nvidida GeForce GTX 1080 Ti GPUs. Individual images were always created on single GPUs.
+
+\subsection{Adjustments}
+\subsubsection*{FID}
+We created and used our own fork of pytorch-fid\cite{Seitzer2020FID} to accommodate for the hpc not being connected to the internet and therefore not being able to download the weights of the Inception model to calculate FID-values. Our fork loads these weights from a local directory to avoid any connection to the internet and requires the user to have them pre-installed.
+
+\subsubsection*{Prompts}
+We shortened every prompt thats exceeds 300 characters in order to reduce the number of tokens to a maximum of 77, as CLIP\cite{radford2021learning} can only handle up to 77 tokens.\\
+This is done by determining the index (\(idx\)) of the last comma in the first 300 characters of every prompt and then cutting off everything from this point onwards.
+\begin{lstlisting}[language=Python]
+prompt = prompt[:idx]
+\end{lstlisting}
+
+\subsection{Comparison to original setup}
+Text.
+
+\subsection{Results}
+Text.
+
+\subsection{Comparison to original results}
+Text.
