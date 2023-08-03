@@ -17,5 +17,5 @@ for m_vol, dir in zip(m_vols, directories):
     perf_values.append([m_vol, fid, avg_time])
 
 perf_log = pd.DataFrame(perf_values, columns=['m_vol', 'fid', 'time'])
-perf_log.to_csv(f'/gpfs/scratch/hebal100/{PATH}/performance_log2.csv', index=False)
+perf_log.to_csv(f'/gpfs/scratch/hebal100/{PATH}/performance_log.csv', index=False)
 
