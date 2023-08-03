@@ -1,19 +1,26 @@
-\documentclass{article}
+\documentclass[12pt,a4paper]{article}
+\usepackage[left=30mm,top=30mm,right=30mm,bottom=27mm]{geometry}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{XCharter}
+\usepackage{setspace}
+\usepackage[pdftex]{hyperref}
 
-\font\myfont=cmr12 at 20pt
-\title{{\myfont Replication of Token Merging for fast Stable Diffusion}}
+
+\title{Replication of Token Merging for fast Stable Diffusion}
 \author{Henri Balster}
 \date{}
 \begin{document}
-\maketitle
-
-\tableofcontents
-
+\pagenumbering{gobble}
+\include{static/titlepage}
 \newpage
+\tableofcontents
+\onehalfspacing
+\newpage
+\pagenumbering{arabic}
 \input{chapter/0_abstract}
 
 \input{chapter/1_intro}
@@ -37,6 +44,7 @@
 \input{chapter/7_conclusion}
 
 \newpage
+\pagenumbering{gobble}
 \bibliographystyle{plain}
 \bibliography{refs}
 

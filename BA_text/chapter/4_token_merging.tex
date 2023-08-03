@@ -1,11 +1,11 @@
 \section{Token Merging}
 In Token Merging for Stable Diffusion\cite{bolya2023tomesd} the number of tokens is reduced by r\% by merging similar tokens before every diffusion step and unmerging them after to retain the original size of the image.\\
-The tokens are partitioned into a source (\(src\)) and a destination (\(dst\)) set and the most similar tokens from the \(src\) set are continously merged into their \(dst\) counterparts until the number of tokens has reduced by \(r\)\%, with \(r\) being a hyperparameter determined by the user.\\ 
+The tokens are partitioned into a source (\textbf{src}) and a destination (\textbf{dst}) set and the most similar tokens from the \textbf{src} set are continously merged into their \textbf{dst} counterparts until the number of tokens has reduced by \(r\)\%, with \(r\) being a hyperparameter determined by the user.\\ 
 The choice of \(r\) is a trade-off between image fidelity and diffusion time as a lower amount of tokens requires a smaller computation time but more information about the image is lost in the merge process.\\
 The merge can be applied in different components of the transformer (i.e., self-attn, cross-attn, mlp) to reduce their volume of the computation. 
 
 \subsection{Merge and Unmerge algorithms}
-\subsubsection*{Merging.} The Merge algorithm uses Bipartite-Soft-Matching to determine the similarity of tokens between the src and dst set. The two most similar tokens are taken and merged into a new token until the overall number of tokens has reduced by \(r\)\%.\\
+\subsubsection*{Merging.} The Merge algorithm uses Bipartite-Soft-Matching to determine the similarity of tokens between the \textbf{src} and \textbf{dst} set. The two most similar tokens are taken and merged into a new token until the overall number of tokens has reduced by \(r\)\%.\\
 Two tokens with \(c\) channels \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1,2}^* \in \mathbb{R}^c \) by averaging it's features, e.g. \[x_{1,2}^* = \frac{x_1 + x_2}{2}\]
 
 \subsubsection*{Unmerging.} The Unmerge algorithm takes an originally merged token $x_{1,2}^* \in \mathbb{R}^c$ and splits it up into its original tokens $x_1', x_2' \in \mathbb{R}^c$, e.g. 
@@ -17,11 +17,11 @@ in order to recreate the pre-merge amount of tokens.\\
 This naive approach does lose information because the now unmerged tokens both have the average of their previous values, but this loss is small due their already high similarity before the merge.\\ Further exploration might yield improvements here.
 
 \subsection{Bipartite-Soft-Matching}
-Bipartite-Soft-Matching takes the tensor of tokens and splits it up into to tensor consisting of the \(src\) and \(dst\) tokens. 
+Bipartite-Soft-Matching takes the tensor of tokens and splits it up into to tensor consisting of the \textbf{src} and \textbf{dst} tokens. 
 
 \subsubsection*{Choosing src and dst}
 The grid of tokens is partitioned into a grid of \(sx \times sy\) batches of tokens.\\
-Within every batch one token is chosen for the \(dst\) set with the rest now belonging to the \(src\) set. The choice is either random (default) or the top left token is always chosen.\\
+Within every batch one token is chosen for the \textbf{dst} set with the rest now belonging to the \textbf{src} set. The choice is either random (default) or the top left token is always chosen.\\
 The number of mergable tokens is limited by the choice of \(sx\) and \(sy\).
 \begin{align*}
     r_{max} = 1-\frac{1}{sx*sy}
