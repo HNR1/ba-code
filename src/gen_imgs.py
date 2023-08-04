@@ -8,7 +8,10 @@ assert len(sys.argv) >= 5
 MAIN_DIR = sys.argv[1]                      #'data/run5'
 sample_size = int(sys.argv[2])              # 50
 x, y =  int(sys.argv[3]), int(sys.argv[4])  # 768, 768
-src_file = sys.argv[5]                      #'run2/logger/log_a5f7c.csv'
+try:
+    src_file = sys.argv[5]                  #'run2/logger/log_a5f7c.csv'
+except IndexError:
+    src_file = None          
 
 # load prompts and generate seeds
 if src_file == None:
