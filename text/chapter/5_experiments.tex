@@ -9,7 +9,7 @@ The performance is defined by\\
 The first iteration of the experiment was to compare how diffusion time and image quality change across a spectrum of different volume of tokens  removed while token merging is applied in different layers of the transformer (self-attention, cross-attention and mlp).\\
 The images were generated with a "DiffusionPipeline" from HuggingFace's diffusers library using the "stable-diffusion-v1-5" model\cite{Rombach_2022_CVPR}.\\
 We sampled a set of \(n=500\) prompts from the dataset "Gustavosta/Stable-Diffusion-Prompts" on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: "Lexica.art".\\
-Seven 768x768 images were created per prompt with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\% and 60\% merge applied respectively, creating a set of 3,500 images which can be split up into 7 subsets of 500 images each for every merge volume.\\
+Seven $768 \times 768$ images were created per prompt, with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\% and 60\% merge applied respectively, creating a set of 3,500 images which can be split up into 7 subsets of 500 images each for every merge volume.\\
 This experiment was run multiple times with the merges applied in different layers of the transformer to compare performance.
 
 \subsubsection*{Hardware}
@@ -30,16 +30,25 @@ prompt = prompt[:idx]
 Text.
 
 \subsection{Results}
+Firstly, we are comparing the sets of $768 \times 768$ images with ToMe applied in different components of the transformer. Each set contains 3,500 images (500 per merge volume).
 
-\input{plots/plot1_fid}
+\newpage
+\subsubsection*{1.1): default (only self-attn) vs all (self-attn, cross-attn and mlp)}
+%\begin{figure}
+%\input{plots/plot1_fid}
+%\input{plots/plot1_time}
+%\end{figure}
+\input{tables/table1}
+Test1
 
-\input{tables/table1_fid}
-
-\input{plots/plot1_time}
-
+\newpage
+\subsubsection*{1.2): default vs self-attn \& cross-attn vs self-attn \& mlp}
+\begin{figure}
 \input{plots/plot2_fid}
-
 \input{plots/plot2_time}
+\end{figure}
+Test1
 
+\newpage
 \subsection{Comparison to original results}
 Text.
