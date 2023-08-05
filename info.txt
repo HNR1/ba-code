@@ -12,4 +12,18 @@ run 6: 500 768x768 images, cross-attn and mlp (inverse default), [0, 0.1, 0.2, 0
 
 run 7: 500 768x768 images, only cross-attn, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes
 
-? run 8: 100 512x512 images, only self-attn (default), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes
+run 8: 500 512x512 images, only self-attn (default), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes
+
+run 9: 500 512x512 images, self-attn and cross-attn, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes
+
+run 10: 500 768x768 images, only self-attn (default), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes [repeat]
+
+cur run 11: 500 768x768 images, self-attn and cross-attn, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes [repeat]
+
+cur run 12: 250? 1024x1024 images, only self-attn (default), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes
+
+tbd run 13: 500 768x768 images, self-attn and cross-attn(?), 1x2 strides, [0, 0.1, 0.2, 0.3, 0.4, 0.5] merge volumes
+
+tbd run 14: 500 768x768 images, self-attn and cross-attn(?), 3x3 strides, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes
+
+tbd run 15: 250? 1024x1024 images, self-attn and cross-attn, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes

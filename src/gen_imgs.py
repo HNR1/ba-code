@@ -9,7 +9,7 @@ MAIN_DIR = sys.argv[1]                      #'data/run5'
 sample_size = int(sys.argv[2])              # 50
 x, y =  int(sys.argv[3]), int(sys.argv[4])  # 768, 768
 try:
-    src_file = sys.argv[5]                  #'run2/logger/log_a5f7c.csv'
+    src_file = sys.argv[5]                  #'run8/logger/log_51gIp.csv'
 except IndexError:
     src_file = None          
 

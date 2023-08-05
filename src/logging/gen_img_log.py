@@ -1,9 +1,12 @@
+import sys
+sys.path.insert(1, '/gpfs/project/hebal100/ba-code')
 import pandas as pd
 
-MAIN_DIR = 'data/run6'
-files = ['log_0OI2J.csv', 'log_b8RLi.csv', 'log_F8hN7.csv', 'log_h0xPt.csv', 
-         'log_QBA0b.csv', 'log_8rN8I.csv', 'log_bXR2e.csv', 'log_GOU8i.csv', 
-         'log_pjxuw.csv', 'log_R9hB0.csv']
+MAIN_DIR = sys.argv[1] #'data/run2'
+
+files = ['log_5WFyd.csv', 'log_Ddp27.csv', 'log_KzFEU.csv', 'log_xopa4.csv',
+         'log_Z01zo.csv', 'log_9pZi6.csv', 'log_DZZnz.csv', 'log_mYH4x.csv',
+         'log_xYRiz.csv',  'log_ZIt2j.csv']
 
 logs = pd.read_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/logger/{files[0]}')
 for file in files[1:]:
