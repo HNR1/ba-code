@@ -46,8 +46,8 @@ def dummy(images, **kwargs):
 pipeline.safety_checker = dummy
 
 # generate images
-def gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger):    
-    tomesd.apply_patch(pipeline, m_vol, merge_attn=True, merge_crossattn=False, merge_mlp=False)
+def gen_loop(pipeline, prompts, seeds, x, y, r, num_imgs, dir, logger):    
+    tomesd.apply_patch(pipeline, r, sx=1, sy=2, merge_attn=True, merge_crossattn=True, merge_mlp=False)
     for i in range(num_imgs):
         prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
         start = time.time()
@@ -58,14 +58,14 @@ def gen_loop(pipeline, prompts, seeds, x, y, m_vol, num_imgs, dir, logger):
         name = 'img_' + ''.join(random.choices(string.ascii_letters + string.digits, k=10))
         image.save(f'/gpfs/scratch/hebal100/{MAIN_DIR}/{dir}/{name}.png')
         # create new log entry
-        logger.append([prompt, seed, m_vol, diff_time, name])
+        logger.append([prompt, seed, r, diff_time, name])
 
-merge_volumes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
-directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50', 'images_60']
+merge_volumes = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
+directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50']
 logger = []
 
-for m_vol, dir in zip(merge_volumes, directories):
-    gen_loop(pipeline, prompts, seeds, x, y, m_vol, sample_size, dir, logger)
+for r, dir in zip(merge_volumes, directories):
+    gen_loop(pipeline, prompts, seeds, x, y, r, sample_size, dir, logger)
 tomesd.remove_patch(pipeline)
 
 # save log

@@ -11,9 +11,11 @@ The images were generated with a "DiffusionPipeline" from HuggingFace's diffuser
 We sampled a set of \(n=500\) prompts from the dataset "Gustavosta/Stable-Diffusion-Prompts" on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: "Lexica.art".\\
 Seven $768 \times 768$ images were created per prompt, with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\% and 60\% merge applied respectively, creating a set of 3,500 images which can be split up into 7 subsets of 500 images each for every merge volume.\\
 This experiment was run multiple times with the merges applied in different layers of the transformer to compare performance.
+--Logs were created--
 
 \subsubsection*{Hardware}
 All experminents were conducted on Nvidida GeForce GTX 1080 Ti GPUs. Individual images were always created on single GPUs.
+--images and logs on 1080ti--
 
 \subsection{Adjustments}
 \subsubsection*{FID}
@@ -31,7 +33,7 @@ Text.
 
 \subsection{Results}
 \subsubsection*{1): Exploring different components of the transformer}
-Firstly, we are comparing the sets of $768 \times 768$ images with ToMe applied in different components of the transformer. Each set contains 3,500 images (500 per merge volume).
+Firstly, we are comparing the sets of $768 \times 768$ images with ToMe applied in different components of the transformer (self-attn, cross-attn and mlp). Each set contains 3,500 images (500 per merge volume).
 
 \newpage
 \subsubsection*{1.1): default (only self-attn) vs all (self-attn, cross-attn and mlp)}
@@ -46,13 +48,21 @@ Test1
 \begin{figure}
     \input{plots/plot2_fid}
     \input{plots/plot2_time}
-    \input{plots/plot3_fid}
-    \input{plots/plot3_time}
+    \input{plots/plot5_fid}
+    \input{plots/plot5_time}
 \end{figure}
 \subsubsection*{1.2): default vs self-attn \& cross-attn vs self-attn \& mlp}
 Test1
 
-\subsubsection*{1.3): default vs self-attn \& cross-attn (the second time)}
+\subsubsection*{1.3): default vs cross-attn \& mlp vs only cross-attn}
+Test1
+
+\newpage
+\begin{figure}
+    \input{plots/plot3_fid}
+    \input{plots/plot3_time}
+\end{figure}
+\subsubsection*{1.4): default vs self-attn \& cross-attn (the second time)}
 Test1
 
 \newpage
@@ -70,12 +80,18 @@ Test1
 Test1
 
 \newpage
+\begin{figure}
+    \input{plots/plot6_fid}
+    \input{plots/plot6_time}
+\end{figure}
 \subsubsection*{3): Exploring different strides}
 Text.
-\subsubsection*{3.1): 1x2 horizontal stride}
+\subsubsection*{3.1): 3x3 stride}
 Test1
-\subsubsection*{3.2): 3x3 stride}
-Test1
+\subsubsection*{3.2): 1x2 horizontal stride}
+\begin{align*}
+    r_{max} = 1-\frac{1}{1*2} = 0.5
+\end{align*}
 
 \newpage
 \subsection{Comparison to original results}

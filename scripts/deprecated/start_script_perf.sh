@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -l select=1:ncpus=1:mem=15gb:ngpus=1:accelerator_model=gtx1080ti 
+#PBS -l select=1:ncpus=1:mem=15gb:ngpus=1:accelerator_model=rtx6000 
 #PBS -l walltime=01:59:00
 #PBS -A "SDwithToMe"
 set -e
@@ -12,4 +12,4 @@ cd /gpfs/project/hebal100/ba-code
 
 python -m pip install --user -r scripts/requirements.txt
 
-python src/logging/gen_perf_log.py 'data/run11'
+python src/logging/gen_perf_log.py 'data/run15'

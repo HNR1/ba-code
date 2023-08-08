@@ -4,8 +4,8 @@ import pandas as pd
 from libs.pytorch_fid.src.fid.fid_score import calculate_fid_given_paths
 
 PATH = sys.argv[1] #'data/run2'
-directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50', 'images_60']
-m_vols = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50']
+m_vols = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
 perf_values = []
 
 for m_vol, dir in zip(m_vols, directories):

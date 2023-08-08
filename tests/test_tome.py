@@ -12,6 +12,6 @@ prompt = "photograph of an astronaut riding a horse"
 seed = 555035
 
 x, y = 768, 768
-tomesd.apply_patch(pipeline, 0.5, use_rand=False)
+tomesd.apply_patch(pipeline, 0.5, use_rand=True)
 image_m1 = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed)).images[0]
 tomesd.remove_patch(pipeline)

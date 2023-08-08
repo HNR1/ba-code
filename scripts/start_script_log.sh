@@ -12,6 +12,6 @@ cd /gpfs/project/hebal100/ba-code
 
 python -m pip install --user -r scripts/requirements.txt
 
-python src/logging/gen_img_log.py 'data/run11'
+python src/logging/gen_img_log.py 'data/run15'
 
-python src/logging/gen_perf_log.py 'data/run11'
+python src/logging/gen_perf_log.py 'data/run15'
