@@ -1,5 +1,5 @@
 \begin{table}[htp]
-\caption{default (only self-attn) vs all (self-attn, cross-attn and mlp)}
+\caption{default vs self-attn \& cross-attn $(512 \times 512)$}
     \begin{minipage}{0.48\textwidth}
         \centering
         \begin{tabular}{|c||c|c|}
@@ -7,12 +7,12 @@
             \multicolumn{1}{|c||}{r\%} & \multicolumn{2}{c|}{FID}\\
             \hline
             0 & 0 & 0 \\
-            10 & 29.95 & 32.07 \\
-            20 & 40.26 & 41.60 \\
-            30 & 47.74 & 49.15 \\
-            40 & 53.48 & 54.98 \\
-            50 & 58.19 & 61.13 \\
-            60 & 62.46 & 66.21 \\
+            10 & 41.06 & 41.45 \\
+            20 & 49.80 & 48.45 \\
+            30 & 55.03 & 54.39 \\
+            40 & 59.10 & 59.16 \\
+            50 & 63.39 & 63.09 \\
+            60 & 68.30 & 67.53 \\
             \hline
         \end{tabular}
     \end{minipage}
@@ -23,13 +23,13 @@
             \hline
             \multicolumn{1}{|c||}{r\%} & \multicolumn{2}{c|}{s/im}\\
             \hline
-            0 & 70.74 & 69.91 \\
-            10 & 63.28 & 62.61 \\
-            20 & 55.64 & 55.06 \\
-            30 & 48.42 & 47.61 \\
-            40 & 42.97 & 41.88 \\
-            50 & 37.04 & 35.76 \\
-            60 & 34.35 & 32.26 \\
+            0 & 16.92 & 17.61 \\
+            10 & 18.08 & 18.39 \\
+            20 & 16.31 & 16.70 \\
+            30 & 15.32 & 15.59 \\
+            40 & 14.35 & 14.67 \\
+            50 & 12.93 & 13.33 \\
+            60 & 12.75 & 12.86 \\
             \hline
         \end{tabular}
     \end{minipage}

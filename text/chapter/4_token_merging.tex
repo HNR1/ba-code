@@ -31,9 +31,9 @@ That means for \(sx = 2\) and \(sy = 2\), no more than 75\% of tokens can be mer
 In the subsequent steps, the two most similar tokens are chosen greedily and merged into one, until \(r\%\) of tokens are gone.
 
 \subsection{Token similarity}
-While it may be tempting to call two tokens similar if the distance between their features is small, this is not necessarily optimal. The intermediate feature space in modern transformers is overparameterized.\\ 
+"While it may be tempting to call two tokens similar if the distance between their features is small, this is not necessarily optimal. The intermediate feature space in modern transformers is overparameterized.\\ 
 Luckily, transformers natively solve this problem with QKV self-attention\cite{vaswani2017attention}.
-Specifically, the keys (K) already summarize the information contained in each token for use in dot product similarity. Thus, we use cosine similarity between the keys of each token to determine which contain similar information\cite{bolya2023tome}.
+Specifically, the keys (K) already summarize the information contained in each token for use in dot product similarity. Thus, we use cosine similarity between the keys of each token to determine which contain similar information"\cite{bolya2023tome}.
 
 \newpage
 \subsubsection*{Computing cosine similarity}
