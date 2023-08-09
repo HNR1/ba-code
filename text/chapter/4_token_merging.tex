@@ -31,11 +31,12 @@ That means for \(sx = 2\) and \(sy = 2\), no more than 75\% of tokens can be mer
 In the subsequent steps, the two most similar tokens are chosen greedily and merged into one, until \(r\%\) of tokens are gone.
 
 \subsection{Token similarity}
-While it may be tempting to call two tokens similar if the distance between their features is small, this is not necessarily optimal. The intermediate feature space in modern transformers is overparameterized.\\ Luckily, transformers natively solve this problem with QKV self-attention\cite{vaswani2017attention}.
+While it may be tempting to call two tokens similar if the distance between their features is small, this is not necessarily optimal. The intermediate feature space in modern transformers is overparameterized.\\ 
+Luckily, transformers natively solve this problem with QKV self-attention\cite{vaswani2017attention}.
 Specifically, the keys (K) already summarize the information contained in each token for use in dot product similarity. Thus, we use cosine similarity between the keys of each token to determine which contain similar information\cite{bolya2023tome}.
 
 \newpage
-\subsubsection*{Computing cosine similarity (tbd)}
+\subsubsection*{Computing cosine similarity}
 ToMe extracts the key tensor (\(M\)) of the image and normalizes it before its \(split\) into the tensor of \textbf{src} tokens (\(S\)) and tensor of \textbf{dst} tokens (\(D\)).
 \begin{lstlisting}[language=Python]
 M = M / M.norm(dim=-1, keepdim=True)
@@ -45,7 +46,7 @@ Continuing from there, the cosine similarity (\(scores\)) between every \textbf{
 \begin{lstlisting}[language=Python]
 scores = S @ D.transpose(-1, -2)
 \end{lstlisting}
-\(scores\) is a tensor with...
+\(scores\) is a tensor with the cosine similarity between every token in \textbf{src} every token in \textbf{dst} 
 
 \subsection{Different approaches?}
 Text.

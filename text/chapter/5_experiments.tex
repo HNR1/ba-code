@@ -32,7 +32,7 @@ prompt = prompt[:idx]
 Text.
 
 \subsection{Results}
-\subsubsection*{1): Exploring different components of the transformer}
+\subsubsection*{1): Experimenting with different components of the transformer}
 Firstly, we are comparing the sets of $768 \times 768$ images with ToMe applied in different components of the transformer (self-attn, cross-attn and mlp). Each set contains 3,500 images (500 per merge volume).
 
 \newpage
@@ -63,7 +63,7 @@ Test1
     \input{plots/plot3_time}
 \end{figure}
 \subsubsection*{1.4): default vs self-attn \& cross-attn (the second time)}
-Test1
+Note that FID doesn’t consider prompt adherance, which is likely why merging the cross attn module actually reduces FID\cite{bolya2023tomesd}. (Still relevent with different expermient setup??)
 
 \newpage
 \begin{figure}
@@ -90,8 +90,18 @@ Text.
 Test1
 \subsubsection*{3.2): 1x2 horizontal stride}
 \begin{align*}
-    r_{max} = 1-\frac{1}{1*2} = 0.5
+    r_{max} = 1-\frac{1}{1*2} = 50\%
 \end{align*}
+Every  \textbf{src} token has to merged when \(r=50\%\) because \(r=r_{max}\) now so the advantage starts to fade.
+
+\newpage
+\begin{figure}
+    \input{plots/plot7_fid}
+    \input{plots/plot7_time}
+\end{figure}
+\subsubsection*{4): Putting it all together}
+Averages of default by Bolya et al.\cite{bolya2023tomesd}, improvement by using selt-attn and cross-attn, improvement by using 1x2 strides. 
+self-attn and cross-attn with 2x2 strides for best time performance. self-attn and cross-attn with 1x2 strides for best quality (low FID) performance.
 
 \newpage
 \subsection{Comparison to original results}
