@@ -2,7 +2,7 @@
 Stable diffusion operates in the compressed latent spaces compared to older models operating in larger image spaces.
 
 \subsection{What are tokens?}
-In image synthesis, a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer\cite{radford2021learning} which defines a token as an $8 \times 8$ block of pixels, so an $768 \times 768$ pixel image has \(\frac{768*768}{8*8}=9216\) tokens.
+In image synthesis, a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer\cite{radford2021learning} which defines a token as an $14 \times 14$ block of pixels. ---CLIP is trained with the ViT-L/14 model---
 
 \subsection{Stable Diffusion}
 Diffusion models, which are built from a hierarchy of
