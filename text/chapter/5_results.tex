@@ -1,31 +1,42 @@
-The baseline is to look at the effects of ToMe (with default settings) applied to $768 \times 768$ images. The experiments can be split up into three different parts inspecting how ToMe affects performance\\ \(1)\) when applied to different parts of the transformer,\\ \(2)\) when applied to smaller $512 \times 512$ images and\\ \(3)\) when different settings for partitioning the \textbf{src} and \textbf{dst} set are used.
+The baseline is to look at the effects of ToMe (with default settings) applied to $768 \times 768$ images. The experiments can be split up into three different parts inspecting how ToMe affects performance\\ \(1)\) when applied to different parts of the transformer,\\ \(2)\) when applied to smaller $512 \times 512$ images and\\ \(3)\) when different settings for partitioning the \textbf{src} and \textbf{dst} sets are used.
 
 \subsubsection*{1): Experimenting with different components of the transformer}
 ToMe's default configuration involves token merging solely within the self-attention module.\\
-Our experiment aims to gauge how the performance metrics are affected by extending token merging to different combinations of transformer components.
+Our experiment aims to gauge how the performance metrics are affected by extending token merging to different combinations of transformer components.\\
+All image sets were created with the same set of prompts and seeds (unless stated otherwise) to ensure the comparability of the results.
 
 \subsubsection*{1.1): default (only self-attn) vs all (self-attn, cross-attn and mlp)}
 \begin{figure}[!htb]
    \input{plots/plot1_fid}
    \input{plots/plot1_time}
 \end{figure}
-Test1
+The first experiment of part 1 compares the default setting of ToMe where token merging is only applied in the self-attn layer (black) with a different configuration that has token merging applied in the self-attn, cross-attn and mlp layer (red). 
+The naive idea here is to improve performance by using token merging in every transformer layer.\\
+This seemingly does not yield significant improvements as image generation speed does narrowly decrease by up to 2.1 s/im (this time-delta is below 1 s/im for $r<40\%$ though; see ~\ref{table:exp_1_1}), albeit at a clear cost of image quality with FID being consistently larger for this configuration. \\
+ToMe in its default setup consistently produces images closer to their no-ToMe original, so extending token merging to both the cross-attn and mlp layer does not appear beneficial. This naive approach can therefore be disregarded.
 
-\newpage
-\subsubsection*{1.2): default vs self-attn \& cross-attn vs self-attn \& mlp}
+%\newpage
+\subsubsection*{1.2): [default] vs [self-attn \& cross-attn] vs [self-attn \& mlp]}
 \begin{figure}[!htb]
     \input{plots/plot2_fid}
     \input{plots/plot2_time}
 \end{figure}
+After \(1.1)\), the question remains whether performance drops were caused by using ToMe in both the cross-attn and mlp layer or only one of them, so the second experiment of part 1 attempts to delve deeper into that matter. This time token merging is only extended to either the cross-attn (red) or the mlp module (blue). Then a comparison is made with the results of the default ToMe settings (black) from the previous trial.\\
+This time it's clearly visible that merging tokens within the self-attn and cross-attn module performs the best, both in terms of image quality and image generation speed, notably surpassing the default configuration established by \cite{bolya2023tomesd}.\\
+Token merging in the mlp module on the other hand noticably worsens the image quality across the board as well as the generation speed when $r<40\%$ compared to the default (see ~\ref{table:exp_1_2}).\\
+We can therefore conclude that extending token merging to the cross-attn module has positive effects on the performance, while extending it to the mlp module has the opposite effect.
 
-\subsubsection*{1.3): default vs cross-attn \& mlp vs only cross-attn}
+\newpage
+\subsubsection*{1.3): [default] vs [cross-attn \& mlp] vs [only cross-attn]}
 \begin{figure}[!htb]
     \input{plots/plot5_fid}
     \input{plots/plot5_time}
 \end{figure}
+The common denominator of the previous examinations was the application of token merging in the self-attn layer. This time...
+The results of the default ToMe settings (black) again carry over from the previous trial.
 
 \newpage
-\subsubsection*{1.4): default vs self-attn \& cross-attn (the second time)}
+\subsubsection*{1.4): [default] vs [self-attn \& cross-attn] (the second time)}
 Note that FID doesn’t consider prompt adherance, which is likely why merging the cross attn module actually reduces FID. (Still relevent with different expermient setup??)
 \begin{figure}[!htb]
     \input{plots/plot3_fid}
@@ -65,3 +76,5 @@ self-attn and cross-attn with 2x2 strides for best time performance. self-attn a
     \input{plots/plot7_fid}
     \input{plots/plot7_time}
 \end{figure}
+
+\subsubsection*{5): Summary}
