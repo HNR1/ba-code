@@ -1,18 +1,18 @@
 \section{Token Merging}
-In Token Merging for Stable Diffusion \cite{bolya2023tomesd} the number of tokens is reduced by \(r\)\% by merging similar tokens before every diffusion step and unmerging them after to retain the original size of the image.\\
-The tokens are partitioned into a source (\textbf{src}) and a destination (\textbf{dst}) set and the most similar tokens from the \textbf{src} set are continously merged into their \textbf{dst} counterparts until the number of tokens has reduced by \(r\)\%.\\
+In Token Merging for Stable Diffusion (ToMe) by \cite{bolya2023tomesd}, the number of tokens in a transformer is reduced by \(r\)\% by merging similar tokens before every diffusion step and unmerging them after to retain the original size of the image.\\
+The tokens are partitioned into a source (\textbf{src}) and a destination (\textbf{dst}) set, then the most similar tokens from the \textbf{src} set are continously merged into their \textbf{dst} counterparts until the number of tokens has reduced by \(r\)\%.\\
 The choice of \(r\) is a trade-off between image fidelity and diffusion time as a lower amount of tokens requires a smaller computation time but more information about the image is lost in the merge process.\\
-The merge can be applied in different components of the transformer (i.e., self-attn, cross-attn, mlp). ToMe is only used in the self-attn layer by defualt.
+The merge can be applied in different components of the transformer (i.e., self-attn, cross-attn, mlp).
 
 
 
-\subsection{Merge and Unmerge algorithms}
+\subsection{Merge and Unmerge Algorithms}
 \subsubsection*{Merging.} The Merge algorithm uses Bipartite-Soft-Matching to determine the similarity of tokens between the \textbf{src} and \textbf{dst} set. The two most similar tokens are taken and merged into a new token until the overall number of tokens has reduced by \(r\%\).\\
-Two tokens with \(c\) channels \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1,2}^* \in \mathbb{R}^c \) by averaging it's features, e.g. \[x_{1,2}^* = \frac{x_1 + x_2}{2}\]
+Two tokens \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1,2}^* \in \mathbb{R}^c \), by averaging it's features: \[x_{1,2}^* = \frac{x_1 + x_2}{2}\]
 
 
 
-\subsubsection*{Unmerging.} The Unmerge algorithm takes an originally merged token $x_{1,2}^* \in \mathbb{R}^c$ and splits it up into its original tokens $x_1', x_2' \in \mathbb{R}^c$, e.g. 
+\subsubsection*{Unmerging.} The Unmerge algorithm takes an originally merged token $x_{1,2}^* \in \mathbb{R}^c$ and splits it up into its original tokens $x_1', x_2' \in \mathbb{R}^c$: 
 \begin{align*}
     x_1' = x_{1,2}^* \quad\quad
     x_2' = x_{1,2}^*
@@ -31,7 +31,7 @@ Bipartite-Soft-Matching involves two main steps. First, the tensor of tokens is 
 The grid of tokens is partitioned into a grid of \(sx \times sy\) batches of tokens.\\
 Within every batch one token is chosen for the \textbf{dst} set with the rest now belonging to the \textbf{src} set. The choice is either random (default) or the top left token is always chosen when the parameter \textbf{use\_rand=False} is set.\\
 \\
-The number of mergable tokens is limited by the choice of \(sx\) and \(sy\).
+The number of mergeable tokens is limited by the choice of \(sx\) and \(sy\).
 \begin{align*}
     r_{max} = 1-\frac{1}{sx*sy}
 \end{align*}
@@ -40,16 +40,16 @@ In the subsequent steps, the two most similar tokens are chosen greedily and mer
 
 
 
-\subsection{Token similarity}
+\subsection{Token Similarity}
 It is also relevant to define what "token similarity" exactly means. Bolya et al. explained: "While it may be tempting to call two tokens similar if the distance between their features is small, this is not necessarily optimal. The intermediate feature space in modern transformers is overparameterized. Luckily, transformers natively solve this problem with QKV self-attention \cite{vaswani2017attention}.\\
 Specifically, the keys (K) already summarize the information contained in each token for use in dot product similarity. Thus, we use cosine similarity between the keys of each token to determine which contain similar information" \cite{bolya2023tome}.
 
 
 
 
-\newpage
+%\newpage
 \subsubsection*{Computing cosine similarity}
-ToMe extracts the hidden states tensor (\(M\)) of the image and normalizes it before its \(split\) into two tensors (\(S\) and \(D\)), seperating the \textbf{src} and \textbf{dst} tokens.
+ToMe extracts the hidden states tensor (\(M\)) of the image and normalizes it before its \(split\) into two tensors (\(S\) and \(D\)), separating the \textbf{src} and \textbf{dst} tokens.
 \begin{lstlisting}[language=Python]
 M = M / M.norm(dim=-1, keepdim=True)
 S, D = split(M)
@@ -58,18 +58,12 @@ Continuing from there, the cosine similarity (\(scores\)) between every \textbf{
 \begin{lstlisting}[language=Python]
 scores = S @ D.transpose(-1, -2)
 \end{lstlisting}
-The two most similar tokens of \textbf{src} and \textbf{dst} now correspond to the index of the largest value of the \(scores\) tensor.
+The \(r\) most similar tokens of \textbf{src} and \textbf{dst} can now be identified by the indices of the largest values of the \(scores\) tensor.
 
 
 
-\subsection{Additional technical information}
-ToMe in its basic form defaults to using \(2 \times 2\) batches for token partitioning and randomly chooses one \textbf{dst} token for every batch, resulting in a 75\% \textbf{src}, 25\% \textbf{dst} split. 
+\subsection{Additional Technical Information}
+ToMe, in its basic form, only merges tokens in the self-attn block and defaults to using \(2 \times 2\) batches for token partitioning, with a randomly chosen \textbf{dst} token for every batch, resulting in a 75\% \textbf{src} and 25\% \textbf{dst} split. \\
 ToMe is also not applied in every network block, but only the ones with the most tokens. Bolya and Hoffman argued:
 "Applying ToMe to every block in the network is not ideal, since blocks at deeper U-Net scales have much fewer tokens. We try restricting ToMe to only blocks with some minimum number of tokens and find that only the blocks with the most tokens need ToMe applied to get most of the speed-up" \cite{bolya2023tomesd}.\\
 Bolya and Hoffman also contemplated to scale the volume of token merging within the diffusion process of an image, but they concluded to keep the amount of tokens merged the same for every diffusion step, stating: "It might not be right to reduce the same number of tokens in each diffusion step. Earlier diffusion steps are coarser and thus might be more forgiving to errors. We test this by linearly interpolating the percent of tokens reduced and find that indeed merging more tokens earlier and fewer tokens later is slightly better, but not enough to be worth it" \cite{bolya2023tomesd}.
-
-
-
-\subsection{Different approaches?}
-Text.
-
