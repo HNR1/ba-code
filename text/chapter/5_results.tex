@@ -83,28 +83,34 @@ In this section, we want to expand the scope of our trials to smaller image size
 %\newpage
 The success of \(1.4)\) does not repeat, as this time it was consistently slower to create images with token merging in the cross-attn block (see Fig.~\ref{fig:exp_2}). The FID seems to bounce a bit with the default performing slightly better for \(r=10\%\) and \(r=40\%\), but performing worse the rest of the time (see Tab.~\ref{table:exp_2}). \\
 The overall speed gains are considerably smaller compared to the \(768 \times 768\) images. Even at \(r=60\%\), the speed gain is only about 25\% and the image generation process actually becomes slower by about 1 s/im at \(r=10\%\) (see Tab.~\ref{table:exp_2}).\\
-We conclude that using ToMe for such small images (e.g. $512 \times 512$ or smaller) is less practical than it is for larger images. It is especially inadvisable to be used with a small merge volume (\(r<20\%\)), as there is no time gained in the diffusion process, but information is lost during merging. \\
+We conclude that using ToMe for such small images (e.g. $512 \times 512$ or smaller) is less practical than it is for larger images. It is especially inadvisable to be used with a small merge volume (\(r<20\%\)), as there is no time gained in the diffusion process, but information is nonetheless lost during merging. \\
 In consequence, we will not investigate the usage of ToMe on this scale any further.
 
 
 
 %\newpage
-\subsubsection*{3): Exploring different strides}
+\subsubsection*{3): Exploring different batch sizes}
+The third part of the experimental section examines, how different values for \(sx\) and \(sy\) influence the performance of ToMe. As a reminder, \(sx\) and \(sy\) determine the size of the token batches, which are used to spread the \textbf{dst} tokens somewhat evenly across the image, with larger batches resulting in a less consistent distribution.
+
+
+
 \subsubsection*{3.1): $3 \times 3$ stride}
-Test1
+The first choice was scaling up from $2 \times 2$ (black) to $3 \times 3$ batches (red). The larger batch size expands the \textbf{src} and shrinks the \textbf{dst} set. This allows ToMe to choose from almost 90\% of the tokens for merging.
 \begin{align*}
     r_{max} = 1-\frac{1}{3*3} = \frac{8}{9} \approx 88.89\%
 \end{align*}
 \subsubsection*{3.2): $1 \times 2$ vertical stride}
+
 \begin{align*}
     r_{max} = 1-\frac{1}{1*2} = 50\%
 \end{align*}
-Every  \textbf{src} token has to be merged when \(r=50\%\) because \(r=r_{max}\) now so the advantage starts to fade.
-
 \begin{figure}[!htb]
     \input{plots/plot6_fid}
     \input{plots/plot6_time}
-\end{figure}
+\caption{FID and time for 3)}
+\label{fig:exp_3}
+\end{figure}\\
+Every  \textbf{src} token has to be merged when \(r=50\%=r_{max}\), so the advantage starts to fade.
 
 
 

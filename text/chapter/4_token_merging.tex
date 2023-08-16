@@ -23,7 +23,7 @@ This naive approach does lose information because the now unmerged tokens both h
 
 
 \subsection{Bipartite-Soft-Matching}
-Bipartite-Soft-Matching involves two main steps. First, the tensor of tokens is split into two tensors, one consisting of the \textbf{src} tokens and the other of \textbf{dst} tokens. Then, each token in the \textbf{src} set is matched with its most similar token in the \textbf{dst} set, resulting in the creation of a bipartite graph of tokens. 
+Bipartite-Soft-Matching involves two main steps. First, the tensor of tokens is split into two tensors, one consisting of the \textbf{src} tokens and the other of \textbf{dst} tokens. Then, each token in the \textbf{src} set is matched with its most similar token in the \textbf{dst} set, creating a bipartite graph, with the edges between every \textbf{src} token and their closest match in the \textbf{dst} set. 
 
 
 
@@ -31,7 +31,7 @@ Bipartite-Soft-Matching involves two main steps. First, the tensor of tokens is 
 The grid of tokens is partitioned into a grid of \(sx \times sy\) batches of tokens.\\
 Within every batch one token is chosen for the \textbf{dst} set with the rest now belonging to the \textbf{src} set. The choice is either random (default) or the top left token is always chosen when the parameter \textbf{use\_rand=False} is set.\\
 \\
-The number of mergeable tokens is limited by the choice of \(sx\) and \(sy\).
+The number of mergeable tokens, which corresponds to the size of the \textbf{src} set, is limited by the choice of \(sx\) and \(sy\).
 \begin{align*}
     r_{max} = 1-\frac{1}{sx*sy}
 \end{align*}
