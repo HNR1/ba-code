@@ -3,6 +3,8 @@ sys.path.insert(1, '/gpfs/project/hebal100/ba-code')
 from diffusers import DiffusionPipeline
 import torch, time, random, string, tomesd, numpy as np, pandas as pd
 
+HPC_PATH = "/gpfs/scratch/hebal100"
+
 # save command line args
 assert len(sys.argv) >= 5
 MAIN_DIR = sys.argv[1]                      #'data/run5'
@@ -21,8 +23,8 @@ if src_file == None:
     seeds = np.random.randint(0, 4294967295, len(prompts))
 # load prompts and seeds from previous run
 else:
-    prompts = pd.read_csv(f'/gpfs/scratch/hebal100/data/{src_file}')['prompt'].values
-    seeds = pd.read_csv(f'/gpfs/scratch/hebal100/data/{src_file}')['seed'].values
+    prompts = pd.read_csv(f'{HPC_PATH}/data/{src_file}')['prompt'].values
+    seeds = pd.read_csv(f'{HPC_PATH}/data/{src_file}')['seed'].values
 
 # method for cutting oversized prompts
 def cut_prompt(prompt, max_len=300, char=','):
@@ -45,7 +47,7 @@ def dummy(images, **kwargs):
     return images, [False]
 pipeline.safety_checker = dummy
 
-# generate images
+# method for generating set of images
 def gen_loop(pipeline, prompts, seeds, x, y, r, num_imgs, dir, logger):    
     tomesd.apply_patch(pipeline, r, sx=1, sy=2, merge_attn=True, merge_crossattn=True, merge_mlp=False)
     for i in range(num_imgs):
@@ -56,14 +58,16 @@ def gen_loop(pipeline, prompts, seeds, x, y, r, num_imgs, dir, logger):
         diff_time = end - start
 
         name = 'img_' + ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        image.save(f'/gpfs/scratch/hebal100/{MAIN_DIR}/{dir}/{name}.png')
+        image.save(f'{HPC_PATH}/{MAIN_DIR}/{dir}/{name}.png')
         # create new log entry
         logger.append([prompt, seed, r, diff_time, name])
 
-merge_volumes = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
-directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50']
+# set up lists
+merge_volumes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50', 'images_60']
 logger = []
 
+# run image generation loop to create image sets
 for r, dir in zip(merge_volumes, directories):
     gen_loop(pipeline, prompts, seeds, x, y, r, sample_size, dir, logger)
 tomesd.remove_patch(pipeline)
@@ -71,4 +75,4 @@ tomesd.remove_patch(pipeline)
 # save log
 log = pd.DataFrame(logger, columns=['prompt', 'seed', 'm_vol', 'time', 'name'])
 name = 'log_' + ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-log.to_csv(f'/gpfs/scratch/hebal100/{MAIN_DIR}/logger/{name}.csv', index=False)
+log.to_csv(f'{HPC_PATH}/{MAIN_DIR}/logger/{name}.csv', index=False)
