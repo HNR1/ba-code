@@ -47,21 +47,6 @@ def dummy(images, **kwargs):
     return images, [False]
 pipeline.safety_checker = dummy
 
-# method for generating set of images
-def gen_loop(pipeline, prompts, seeds, x, y, r, num_imgs, dir, logger):    
-    tomesd.apply_patch(pipeline, r, sx=1, sy=2, merge_attn=True, merge_crossattn=True, merge_mlp=False)
-    for i in range(num_imgs):
-        prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
-        start = time.time()
-        image = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed)).images[0]
-        end = time.time()
-        diff_time = end - start
-
-        name = 'img_' + ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        image.save(f'{HPC_PATH}/{MAIN_DIR}/{dir}/{name}.png')
-        # create new log entry
-        logger.append([prompt, seed, r, diff_time, name])
-
 # set up lists
 merge_volumes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50', 'images_60']
@@ -69,7 +54,19 @@ logger = []
 
 # run image generation loop to create image sets
 for r, dir in zip(merge_volumes, directories):
-    gen_loop(pipeline, prompts, seeds, x, y, r, sample_size, dir, logger)
+    tomesd.apply_patch(pipeline, r, sx=1, sy=2, merge_attn=True, merge_crossattn=True, merge_mlp=False)
+    for i in range(sample_size):
+        prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
+        # create image
+        start = time.time()
+        image = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed)).images[0]
+        end = time.time()
+        diff_time = end - start
+        # save image
+        name = 'img_' + ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+        image.save(f'{HPC_PATH}/{MAIN_DIR}/{dir}/{name}.png')
+        # create new log entry
+        logger.append([prompt, seed, r, diff_time, name])       
 tomesd.remove_patch(pipeline)
 
 # save log

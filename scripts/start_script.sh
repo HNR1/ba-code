@@ -12,5 +12,4 @@ cd /gpfs/project/hebal100/ba-code
 
 python -m pip install --user -r scripts/requirements.txt
 
-python src/gen_imgs.py 'data/run16' 50 768 768 'run4/logger/log_ZUxgl.csv'
-
+python src/gen_imgs.py 'data/run17' 100 512 512
