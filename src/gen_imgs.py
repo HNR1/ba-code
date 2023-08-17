@@ -7,11 +7,21 @@ HPC_PATH = "/gpfs/scratch/hebal100"
 
 # save command line args
 assert len(sys.argv) >= 5
-MAIN_DIR = sys.argv[1]                      #'data/run5'
-sample_size = int(sys.argv[2])              # 50
-x, y =  int(sys.argv[3]), int(sys.argv[4])  # 768, 768
+MAIN_DIR = sys.argv[1] #'data/run5'
+sample_size = int(sys.argv[2]) # 50
+x, y =  int(sys.argv[3]), int(sys.argv[4]) # 768, 768
+
 try:
-    src_file = sys.argv[5]                  #'run8/logger/log_51gIp.csv'
+    bool_string = sys.argv[5] #'TTF'
+    assert len(bool_string) == 3
+except IndexError:
+    bool_string = 'TFF' 
+bool_sa = False if bool_string[0] == 'F' else True
+bool_ca = True if bool_string[1] == 'T' else False
+bool_mlp = True if bool_string[2] == 'T' else False
+
+try:
+    src_file = sys.argv[6] #'run8/logger/log_51gIp.csv'
 except IndexError:
     src_file = None          
 
@@ -54,7 +64,7 @@ logger = []
 
 # run image generation loop to create image sets
 for r, dir in zip(merge_volumes, directories):
-    tomesd.apply_patch(pipeline, r, sx=1, sy=2, merge_attn=True, merge_crossattn=True, merge_mlp=False)
+    tomesd.apply_patch(pipeline, r, sx=1, sy=2, merge_attn=bool_sa, merge_crossattn=bool_ca, merge_mlp=bool_mlp)
     for i in range(sample_size):
         prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
         # create image
