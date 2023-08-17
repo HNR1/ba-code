@@ -4,7 +4,7 @@ The results of every experimental unit are presented in two figures. The first f
 Both figures have \(r\%\) on the x-axis showing how the metrics change with an increasing amount of tokens merged.
 
 \subsubsection*{1): Experimenting with different components of the transformer}
-ToMe's default configuration involves token merging solely within the self-attention module.\\
+ToMe's default configuration involves token merging solely within the self-attention module.
 Our experiment aims to gauge how the performance metrics are affected by extending token merging to different combinations of transformer components.\\
 All image sets were created with the same set of prompts and seeds (unless stated otherwise) to ensure the comparability of the results.
 
@@ -28,13 +28,14 @@ ToMe in its default setup consistently produces images closer to their no-ToMe o
 
 %\newpage
 \subsubsection*{1.2): [default] vs [self-attn \& cross-attn] vs [self-attn \& mlp]}
-After \(1.1)\), the question remains whether performance drops were caused by using ToMe in both the cross-attn and mlp layer or only one of them, so the second experiment of part 1 attempts to delve deeper into that matter. This time token merging is only extended to either the cross-attn (red) or the mlp module (blue). Then a comparison is made with the results of the default ToMe settings (black) from the previous trial.
+After \(1.1\), the question remains whether performance drops were caused by using ToMe in both the cross-attn and mlp layer or only one of them, so the second experiment of part 1 attempts to delve deeper into that matter. This time token merging is only extended to either the cross-attn (red) or the mlp module (blue). Then a comparison is made with the results of the default ToMe settings (black) from the previous trial.
 \begin{figure}[!htb]
     \input{plots/plot2_fid}
     \input{plots/plot2_time}
 \caption{FID and time for 1.2)}
 \label{fig:exp_1_2}
 \end{figure}\\
+\newpage
 This time it's clearly visible that merging tokens within the self-attn and cross-attn module performs the best, both in terms of image quality and image generation speed, notably surpassing the default configuration established by \cite{bolya2023tomesd} (see Fig.~\ref{fig:exp_1_2}).\\
 Token merging in the self-attn and mlp module on the other hand noticeably worsens the image quality across the board as well as the generation speed when $r<40\%$ compared to the default (see Tab.~\ref{table:exp_1_2}).\\
 We can therefore conclude that extending token merging to the cross-attn module has positive effects on the performance, while extending it to the mlp module has the opposite effect.
@@ -44,7 +45,7 @@ We can therefore conclude that extending token merging to the cross-attn module 
 %\newpage
 \subsubsection*{1.3): [default] vs [cross-attn \& mlp] vs [only cross-attn]}
 The common denominator of the previous examinations was the application of token merging in the self-attn layer. This time we are explicitly avoiding token merging in the self-attn module and instead apply it in only the cross-attn (blue) and both the cross-attn and mlp component (red).
-The results of the default ToMe settings (black) again carry over from the previous trial.
+The results of the default ToMe settings (black) again carry over from the previous trial.\\
 \begin{figure}[!htb]
     \input{plots/plot5_fid}
     \input{plots/plot5_time}
@@ -84,7 +85,7 @@ In this section, we want to expand the scope of our trials to smaller image size
 \label{fig:exp_2}
 \end{figure}\\
 %\newpage
-The success of \(1.4)\) does not repeat, as this time it was consistently slower to create images with token merging in the cross-attn block (see Fig.~\ref{fig:exp_2}). The FID seems to bounce a bit with the default performing slightly better for \(r=10\%\) and \(r=40\%\), but performing worse the rest of the time (see Tab.~\ref{table:exp_2}). \\
+The success of \(1.4\) does not repeat, as this time it was consistently slower to create images with token merging in the cross-attn block (see Fig.~\ref{fig:exp_2}). The FID seems to bounce a bit with the default performing slightly better for \(r=10\%\) and \(r=40\%\), but performing worse the rest of the time (see Tab.~\ref{table:exp_2}). \\
 The overall speed gains are considerably smaller compared to the \(768 \times 768\) images. Even at \(r=60\%\), the speed gain is only about 25\% and the image generation process actually becomes slower by about 1 s/im at \(r=10\%\) (see Tab.~\ref{table:exp_2}).\\
 We conclude that using ToMe for such small images (e.g. $512 \times 512$ or smaller) is less practical than it is for larger images. It is especially inadvisable to be used with a small merge volume (\(r<20\%\)), as there is no time gained in the diffusion process, but information is nonetheless lost during merging. \\
 In consequence, we will not investigate the usage of ToMe on this scale any further.
@@ -93,7 +94,7 @@ In consequence, we will not investigate the usage of ToMe on this scale any furt
 
 %\newpage
 \subsubsection*{3): Exploring different batch sizes}
-The third part of the experimental section examines, how different values for \(sx\) and \(sy\) influence the performance of ToMe. As a reminder, \(sx\) and \(sy\) determine the size of the token batches, which are used to spread the \textbf{dst} tokens somewhat evenly across the image, with larger batches resulting in a less consistent distribution.
+The third part of the experimental section examines, how different values for \(sx\) and \(sy\) influence the performance of ToMe on $768 \times 768$ images. As a reminder, \(sx\) and \(sy\) determine the size of the token batches, which are used to spread the \textbf{dst} tokens somewhat evenly across the image, with larger batches resulting in a less consistent distribution. Our new default of ToMe with token merging applied in both the self-attn and cross-attn layer will be used throughout this section.
 
 
 
@@ -119,23 +120,29 @@ This limits our merge volume to 50\% but allows for better matches during the me
 \caption{FID and time for 3)}
 \label{fig:exp_3}
 \end{figure}\\
-Minor effects on time as they are all always within one second of each other (see Tab.~\ref{table:exp_3}).
-At \(r=50\%=r_{max}\), every \textbf{src} token has to be merged, so the advantage starts to fade.
+The resizing of the batches has only minor effects on image generation speed, as all three configurations consistently remain within one second of each other (see Tab.~\ref{table:exp_3}).\\
+Image quality shows a noticeable improvement with decreasing batch sizes. The ToMe version with $3 \times 3$ batches is slightly surpassed by the $2 \times 2$ version, and this improvement is further enhanced when transitioning to $1 \times 2$ batches. (see Fig.~\ref{fig:exp_3}).
+The gap closes towards \(r=50\%=r_{max}\), as every \textbf{src} token has to be merged when using $1 \times 2$ batches, regardless of how good of a match from \textbf{dst} is available.\\
+It can still be concluded that using the $1 \times 2$ batches to create an equal number of \textbf{src} and \textbf{dst} tokens yields the best performance, especially when \(r\) is not close to \(0\%\) or \(r_{max}\), while the usage of larger batches with a smaller \(\textbf{dst\%}\) is not advisable.
 
 
 
 \newpage
 \subsubsection*{4): Putting it all together}
-Text.\begin{figure}[!htb]
+Finally, we are comparing the most successful configurations from the past experiments. That means we are looking at \textbf{setup 1}: the ToMe default by \cite{bolya2023tomesd} (black), \textbf{setup 2}: our new default with token merging expanded to the cross-attn layer from \(1.2\) and \(1.4\) (red), and \textbf{setup 3}: the new default but with $1 \times 2$ batches for token partitioning from \(3.2\) (blue).\\
+We expanded the image sets for the first two configurations to 1000 images per merge volume in \(1.4\), so we will do the same for the other one to enable examinations on a larger scale.
+\begin{figure}[!htb]
     \input{plots/plot7_fid}
     \input{plots/plot7_time}
 \caption{FID and time for 4)}
 \label{fig:exp_4}
 \end{figure}\\
-Averages of default by \cite{bolya2023tomesd}, improvement by using selt-attn and cross-attn, improvement by using 1x2 strides. 
-self-attn and cross-attn with 2x2 strides for best time performance. self-attn and cross-attn with 1x2 strides for best quality (low FID) performance.
+Again, speed is very close across the board, as \textbf{setup 2} is the fastest by only a small margin (see Tab.~\ref{table:exp_4}).
+Our discoveries regarding image quality are also reinforced, with \textbf{setup 3} noticeably outperforming the rest and \textbf{setup 1} consistently being the worst (see Fig.~\ref{fig:exp_4}).\\
 
 
 
+%\newpage
 \subsubsection*{Summary}
+The experiments we conducted show that ...\\
 ---cross-attn schneller in 768x768 aber langsamer in 768x768---
