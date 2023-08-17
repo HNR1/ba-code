@@ -1,8 +1,17 @@
 \section{Token Merging}
 In Token Merging for Stable Diffusion (ToMe) by \cite{bolya2023tomesd}, the number of tokens in a transformer is reduced by \(r\)\% through merging similar tokens before every diffusion step and unmerging them afterward to retain the original size of the image.\\
-The tokens are partitioned into a source (\textbf{src}) and a destination (\textbf{dst}) set, then the most similar tokens from the \textbf{src} set are continously merged into their \textbf{dst} counterparts until the number of tokens has reduced by \(r\)\%.\\
+The tokens are partitioned into a source (\textbf{src}) and a destination (\textbf{dst}) set (see Fig.~\ref{fig:tome}), then the most similar tokens from the \textbf{src} set are continuously merged into their \textbf{dst} counterparts until the number of tokens has reduced by \(r\)\%.\\
 The choice of \(r\) is a trade-off between image fidelity and diffusion time as a lower amount of tokens requires a smaller computation time but more information about the image is lost in the merge process.\\
-The merge can be applied in different components of the transformer (i.e., self-attn, cross-attn, mlp).
+The merge can be applied in different components of the transformer (i.e., self-attn, cross-attn, mlp) (see Fig.~\ref{fig:tome}).
+\begin{figure}[!htb]
+\includegraphics[width=0.55\textwidth]
+{static/transformer_graphic.png}
+\hfill
+\includegraphics[width=0.37\textwidth]
+{static/src_dst.png}
+\caption{Transformer with ToMe and partition of tokens into src (red) and dst (blue). \cite{bolya2023tomesd}.}
+\label{fig:tome}
+\end{figure}
 
 
 
