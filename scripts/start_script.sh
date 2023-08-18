@@ -12,4 +12,4 @@ cd /gpfs/project/hebal100/ba-code
 
 python -m pip install --user -r scripts/requirements.txt
 
-python src/gen_imgs.py 'data/run18' 100 512 512 'TTF' 'run17/logger/log_yIODP.csv'
+python src/gen_imgs.py 'data/run18' 50 512 512 

@@ -109,7 +109,7 @@ We will, nevertheless, not exceed a merge rate of \(r=60\%\), as image quality a
 
 \subsubsection*{3.2): $1 \times 2$ vertical batches}
 Scaling down the same way to $1 \times 1$ batches is impossible, as it would result in every token landing in the \textbf{dst} set and \(r_{max}=0\%\).\\
-We therefore chose to cut the batches in half horizontally and create an even 50-50 split between \textbf{src} and \textbf{dst}.
+We therefore chose to cut the batches in half horizontally, creating $1 \times 2$ batches. This decision led to a balanced 50-50 distribution between \textbf{src} and \textbf{dst}.
 \begin{align*}
     r_{max} = 1-\frac{1}{1*2} = 50\%
 \end{align*}
@@ -144,5 +144,7 @@ Our discoveries regarding image quality are also reinforced, with \textbf{setup 
 
 %\newpage
 \subsubsection*{Summary}
-The experiments we conducted show that ...\\
----cross-attn schneller in 768x768 aber langsamer in 768x768---
+The experiments we conducted suggest that the best performance can be achieved by applying token merging in both the self-attn and cross-attn layer of the transformer. Depending on whether speed or image quality is the most important demand, $1 \times 2$ (best image quality) or $2 \times 2$ batches (highest speed) can be chosen for token partitioning, with $1 \times 2$ batches bringing particularly great improvements to image quality when \(r\leq40\%\).\\
+Another important discovery is that token merging in the self-attn module is essential to unlocking speed improvements for image generation. On the other hand, using ToMe in the mlp layer seems to exclusively come at a disadvantage.\\
+Moreover, it is important to create sufficiently large images when using ToMe in order to see the speed benefits. We showed that the time improvements with token merging noticably decrease from >50\% for $768 \times 768$ images to only about 25\% for $512 \times 512$ images at \(r=60\%\) (see Tab.~\ref{table:exp_1_4},~\ref{table:exp_2}).\\
+Additionally, it was shown that strongly skewing the \textbf{src}-\textbf{dst}-ratio away from an equal distribution has negative effects on image quality as well (see Tab.~\ref{table:exp_2}).
