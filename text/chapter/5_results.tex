@@ -53,8 +53,8 @@ The results of the default ToMe settings (black) again carry over from the previ
 \label{fig:exp_1_3}
 \end{figure}\\
 The most striking result here is that no token merging in the self-attn layer corresponds to no image generation speedup at all, rather slowing the process down (see Tab.~\ref{table:exp_1_3}). 
-The apparent improvements to image quality compared to the ToMe default (see Fig.~\ref{fig:exp_1_3}) consequently become negligible without any speed benefits.\\
-We conclusively derive that ToMe without involvement of the self-attn layer does not accelerate the image generation process at all and can be considered redundant and therefore be disregarded.
+The apparent improvements to image quality compared to the ToMe default (see Fig.~\ref{fig:exp_1_3}) consequently become negligible without any speed benefits, though it can be noted that token merging in only the cross-attn layer greatly outperforms token merging in both cross-attn and mlp layer in terms of image quality.\\
+We conclusively derive that ToMe without involvement of the self-attn layer does not accelerate the image generation process at all and can be considered redundant and therefore be disregarded. It can additionally be derived from \(1.1 - 1.3\) that token merging in the mlp layer has strong negative effects on image quality.
 
 
 
@@ -98,6 +98,7 @@ The third part of the experimental section examines, how different values for \(
 
 
 
+\newpage
 \subsubsection*{3.1): $3 \times 3$ batches}
 The first choice was scaling up from $2 \times 2$ (black) to $3 \times 3$ batches (red). This setup strongly tilts the ratio of src and dst tokens toward the former and theoretically allows for a larger number of tokens to be merged. 
 \begin{align*}
@@ -127,7 +128,7 @@ It can still be concluded that using the $1 \times 2$ batches to create an equal
 
 
 
-\newpage
+%\newpage
 \subsubsection*{4): Putting it all together}
 Finally, we are comparing the most successful configurations from the past experiments. That means we are looking at \textbf{setup 1}: the ToMe default by \cite{bolya2023tomesd} (black), \textbf{setup 2}: our new default with token merging expanded to the cross-attn layer from \(1.2\) and \(1.4\) (red), and \textbf{setup 3}: the new default but with $1 \times 2$ batches for token partitioning from \(3.2\) (blue).\\
 We expanded the image sets for the first two configurations to 1000 images per merge volume in \(1.4\), so we will do the same for the other one to enable examinations on a larger scale.
@@ -146,5 +147,5 @@ Our discoveries regarding image quality are also reinforced, with \textbf{setup 
 \subsubsection*{Summary}
 The experiments we conducted suggest that the best performance can be achieved by applying token merging in both the self-attn and cross-attn layer of the transformer. Depending on whether speed or image quality is the most important demand, $1 \times 2$ (best image quality) or $2 \times 2$ batches (highest speed) can be chosen for token partitioning, with $1 \times 2$ batches bringing particularly great improvements to image quality when \(r\leq40\%\).\\
 Another important discovery is that token merging in the self-attn module is essential to unlocking speed improvements for image generation. On the other hand, using ToMe in the mlp layer seems to exclusively come at a disadvantage.\\
-Moreover, it is important to create sufficiently large images when using ToMe in order to see the speed benefits. We showed that the time improvements with token merging noticably decrease from >50\% for $768 \times 768$ images to only about 25\% for $512 \times 512$ images at \(r=60\%\) (see Tab.~\ref{table:exp_1_4},~\ref{table:exp_2}).\\
+Moreover, it is important to create sufficiently large images when using ToMe in order to see the speed benefits. We showed that the time improvements with token merging noticeably decrease from >50\% for $768 \times 768$ images to only about 25\% for $512 \times 512$ images at \(r=60\%\) (see Tab.~\ref{table:exp_1_4},~\ref{table:exp_2}).\\
 Additionally, it was shown that strongly skewing the \textbf{src}-\textbf{dst}-ratio away from an equal distribution has negative effects on image quality as well (see Tab.~\ref{table:exp_2}).

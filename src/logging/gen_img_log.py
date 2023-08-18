@@ -6,7 +6,7 @@ HPC_PATH = "/gpfs/scratch/hebal100"
 MAIN_DIR = sys.argv[1] #'data/run16'
 
 # names of log files of run16
-files = ['log_yIODP.csv']
+files = ['log_EBZ3v.csv']
 '''files = ['log_3fBc5.csv', 'log_BrAkV.csv', 'log_f77w7.csv', 'log_lqsyS.csv',
          'log_vq59J.csv', 'log_64YNq.csv', 'log_C4AiR.csv', 'log_IGnWZ.csv',
          'log_rV7Lh.csv', 'log_VWBJq.csv']'''
