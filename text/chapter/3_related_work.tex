@@ -1,7 +1,14 @@
 \section{Related Work}
 
-\subsection{Token Pruning}
-Text.
+\subsection*{Token Reduction}
+"Since transformers can operate with any number of tokens, several recent works
+have attempted to prune the tokens from transformers in both NLP \cite{goyal2020power, kim2020length, kim2022learned, lassance2021study} and Vision \cite{meng2022adavit, yin2022vit, kong2021spvit, song2022cp, rao2021dynamicvit, fayyaz2022adaptive, yu2023unified}. However,
+these methods require training, while our method can be used without training. Moreover, most
+pruning works are dynamic, i.e., the number of tokens varies between images or sentences. While this
+benefits accuracy it limits practicality, as samples with different numbers of tokens can no longer be
+batched. To solve this, most pruning papers apply a mask during training rather than remove tokens,
+which negates the speed-up from pruning. Our method, on the other hand, can be applied during both
+inference and training, achieving real-world speed-ups in either case" \cite{bolya2023tome}.
 
-\subsection{Token merging without unmerging?}
-Text.
+\subsection*{Combining Tokens}
+"While plenty of works prune tokens, very few combine them. \cite{kong2021spvit} and \cite{liang2022not} combine what they prune into a single token. GroupViT \cite{xu2022groupvit}, while not focused on efficiency, groups tokens using cross-attention for semantic segmentation. TokenLearner \cite{ryoo2021tokenlearner} uses an MLP to reduce the number of tokens. LIT \cite{pan2022less} learns deformable token merging layers for pooling between stages. Token Pooling \cite{marin2021token} is the most similar to our token merging but uses a slow k-means-based approach that does not work on an off-the-shelf model. Until now, no approach has been successful in offering a reasonable speed-accuracy trade-off when combining tokens without training" \cite{bolya2023tome}.

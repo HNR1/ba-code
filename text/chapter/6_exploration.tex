@@ -1,5 +1,6 @@
 \section{Further Exploration}
---bigger images--
---different strides?--
---different unmerge algos--
---experiments with different number of dst tokens per batch--
+The results of our experiments could be improved by expanding on the influence of different elements of ToMe's or SD's configuration.\\ 
+The larger $768 \times 768$ images benefited noticeably more from token merging than the $512 \times 512$ images, so exploration whether this positive effect further scales up with image size could be relevant.\\
+Another aspect we rather briefly touched upon is the selection of \textbf{dst} tokens. ToMe currently only selects one \textbf{dst} token per batch so experimenting with multiple \textbf{dst} tokens and larger batches might improve performance as well.\\ 
+Further improvements could also be achieved by "exploring 1.) better unmerging strategies or 2.) whether proportional attention or key-based similarity are useful for diffusion. Furthermore, our success motivates more exploration into using ToMe for dense prediction tasks" \cite{bolya2023tomesd}.
+The current unmerge algorithm is quite naive, so figuring out a way to keep some of the information currently lost during the merge process could also greatly benefit the image quality.\\

@@ -15,7 +15,7 @@ The merge can be applied in different components of the transformer (i.e., self-
 
 \subsection{Merge and Unmerge Algorithms}
 \subsubsection*{Merging.} The Merge algorithm uses Bipartite-Soft-Matching to determine the similarity of tokens between the \textbf{src} and \textbf{dst} set. The two most similar tokens are taken and merged into a new token until the overall number of tokens has reduced by \(r\%\).\\
-Two tokens \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1,2}^* \in \mathbb{R}^c \), by averaging it's features: \[x_{1,2}^* = \frac{x_1 + x_2}{2}\]
+Two tokens \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1,2}^* \in \mathbb{R}^c \), by averaging their features: \[x_{1,2}^* = \frac{x_1 + x_2}{2}\]
 
 
 
@@ -25,7 +25,7 @@ Two tokens \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1
     x_2' = x_{1,2}^*
 \end{align*}
 in order to recreate the pre-merge amount of tokens.\\
-This naive approach does lose information because the now unmerged tokens both have the average of their previous values, but this loss is small due their already high similarity before the merge.\\ Further exploration might yield improvements here.
+This naive approach does lose information because the now unmerged tokens both have the average of their previous values, but this loss is small due their already high similarity before the merge.
 
 
 

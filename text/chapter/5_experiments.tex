@@ -48,12 +48,13 @@ prompt = prompt[:idx]
 \end{lstlisting}
 
 
-\newpage
+%\newpage
 \subsection{Comparison to Original Setup}
 \cite{bolya2023tomesd} structure their experiments as follows: "We use Stable diffusion v1.5 to generate 2,000 $512 \times 512$ images of ImageNet-1k \cite{deng2009imagenet} classes (2 per class) using 50 PLMS \cite{liu2022pseudo} diffusion steps with a cfg scale \cite{dhariwal2021diffusion} of 7.5. We then compute FID scores between those 2,000 samples and 5,000 class-balanced ImageNet-1k val examples using \cite{Seitzer2020FID}. To test speed, we simply average the time taken over all 2,000 samples on a single 4090 GPU."\\
+\\
 %\newpage
 The most notable difference to our setup is that we compare a set of merged images with their own unmerged versions, while Bolya and Hoffman's approach compares image sets of the same categories but does not directly try to measure alterations of images created by ToMe.\\
-Additionally, Bolya and Hoffman also measured and analyzed the memory usage during the diffusion process, we left memory consumption completely out of the scope of this work.
+Additionally, Bolya and Hoffman also measured and analyzed the memory usage during the diffusion process, while we left memory consumption completely out of the scope of this work.
 
 
 
@@ -63,11 +64,13 @@ Additionally, Bolya and Hoffman also measured and analyzed the memory usage duri
 
 
 
-%\newpage
+\newpage
 \subsection{Comparison to Original Results}
 The great differences in experimental setups and hardware make it impossible to compare specific numbers. The general promises of ToMe for SD by Bolya and Hofmann can be confirmed though, as our results show that ToMe makes image generation up to $2 \times$ faster while still maintaining great image quality at \(r = 60\%\).\\
+\\
 However, our findings suggest different configurations of ToMe yield better results.
 Firstly, we found out that expanding token merging from only the self-attn layer to the cross-attn layer improves both speed and quality. There was no data for this setup listed by Bolya and Hofmann, although they mentioned: "Note that FID does not consider prompt adherence, which is likely why merging the cross-attn module actually reduces FID" \cite{bolya2023tomesd}. \\
 The implicit assertion that extending token merging to the cross-attn module lowers image quality outside of the scope of FID seems less plausible, as our setup indirectly considers prompt adherence by measuring the similarity between identical images (same size, prompt and seed), instead of larger sets of images that are merely class-balanced.\\
-Though our results do confirm Bolya and Hofmann's observation that token merging in the mlp layer is clearly detrimental to image quality.\\
-Furthermore, our findings regarding token partitioning clearly contradict Bolya and Hofmann's. They also trialed the $1 \times 2$ batches and found stronger deteriorations to image quality, than with $2 \times 2$ strides \cite[Tab.~2 (a)]{bolya2023tomesd}.
+Though our results do confirm Bolya and Hofmann's observation that token merging in the mlp layer is clearly detrimental to image quality and thus not recommended.\\
+\\
+Furthermore, our findings regarding token partitioning clearly contradict Bolya and Hofmann's. Their partition experiments found notably stronger deteriorations to image quality for $1 \times 2$ strides than for $2 \times 2$ strides, with FID being almost 10\% larger at \(r=50\%\) for the former \cite[Tab.~2 (a)]{bolya2023tomesd}. For us on the other hand, FID was about 2\% smaller at \(r=50\%\) and almost 10\% smaller at \(r=30\%\) for the $1 \times 2$ batches (see Tab.~\ref{table:exp_4}). 
