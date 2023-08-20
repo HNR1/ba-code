@@ -1,27 +1,44 @@
 \section{Background}
-Stable diffusion operates in the compressed latent spaces compared to older models operating in larger image spaces.
 
-\subsection{What are tokens?}
-In image synthesis, a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer\cite{radford2021learning} which defines a token as an $14 \times 14$ block of pixels. ---CLIP is trained with the ViT-L/14 model---
+
+
+\subsection{Diffusion Models}
+"Diffusion models \cite{dhariwal2021diffusion, sohl2015deep, song2019generative} generate images by repeatedly denoising some initial noise over some number of diffusion steps. Like most modern large diffusion models, Stable Diffusion uses a U-Net \cite{ronneberger2015u} with transformer-based blocks. Thus, it first encodes the current noised image as a set of tokens, then passes it through a series of transformer blocks. Each transformer block has the standard self attention \cite{vaswani2017attention} and multi-layer perception (mlp) modules, with the addition of a cross-attention module to condition on the prompt" \cite{bolya2023tomesd}.
 
 \subsection{Stable Diffusion}
-Diffusion models, which are built from a hierarchy of
-denoising autoencoders. A neural network is trained to denoise images blurred with Gaussian noise by learning to reverse the diffusion process
+"Stable Diffusion is based on a particular type of diffusion model called Latent Diffusion \cite{Rombach_2022_CVPR}. [...] Latent diffusion can reduce the memory and compute complexity by applying the diffusion process over a lower dimensional latent space, instead of using the actual pixel space. This is the key difference between standard diffusion and latent diffusion models: in latent diffusion the model is trained to generate latent (compressed) representations of the images" \cite{patil2022stable}.
+
 
 \subsubsection{Transformer Architecture}
-Different components: Self-Attention (self-attn), Cross-Attention (cross-attn) and Multilayer Perceptron (mlp).
+Different components: Self-Attention (self-attn), Cross-Attention (cross-attn) and Multi-Layer Perceptron (mlp).
+
+
 
 \subsubsection{Attention and Self-Attention}
 Text.
 
+
+
 \subsubsection{Training?}
 Forward diffusion. Noise is added to an image. NN trained on it.
+
+
 
 \subsection{Frechet-Inception-Distance (FID)}
 PyTorch implementation\cite{Seitzer2020FID}
 
+
+
 \subsubsection{Inception Model}
 Text.
 
+
+
+
 \subsubsection{Caveats}
 Inception model is biased. Inception model compresses images to 299x299 pixels. FID inconsistent with ToMe applied (not exactly reproducable)
+
+
+
+\subsection{What are tokens?}
+In image synthesis, a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer\cite{radford2021learning} which defines a token as an $14 \times 14$ block of pixels. ---CLIP is trained with the ViT-L/14 model---
