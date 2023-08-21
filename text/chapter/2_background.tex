@@ -2,11 +2,10 @@
 
 
 
-\subsection{Diffusion Models}
-"Diffusion models \cite{dhariwal2021diffusion, sohl2015deep, song2019generative} generate images by repeatedly denoising some initial noise over some number of diffusion steps. Like most modern large diffusion models, Stable Diffusion uses a U-Net \cite{ronneberger2015u} with transformer-based blocks. Thus, it first encodes the current noised image as a set of tokens, then passes it through a series of transformer blocks. Each transformer block has the standard self attention \cite{vaswani2017attention} and multi-layer perception (mlp) modules, with the addition of a cross-attention module to condition on the prompt" \cite{bolya2023tomesd}.
-
 \subsection{Stable Diffusion}
-"Stable Diffusion is based on a particular type of diffusion model called Latent Diffusion \cite{Rombach_2022_CVPR}. [...] Latent diffusion can reduce the memory and compute complexity by applying the diffusion process over a lower dimensional latent space, instead of using the actual pixel space. This is the key difference between standard diffusion and latent diffusion models: in latent diffusion the model is trained to generate latent (compressed) representations of the images" \cite{patil2022stable}.
+"Diffusion models \cite{dhariwal2021diffusion, sohl2015deep, song2019generative} generate images by repeatedly denoising some initial noise over some number of diffusion steps. Like most modern large diffusion models, Stable Diffusion uses a U-Net \cite{ronneberger2015u} with transformer-based blocks. Thus, it first encodes the current noised image as a set of tokens, then passes it through a series of transformer blocks. Each transformer block has the standard self attention \cite{vaswani2017attention} and multi-layer perception (mlp) modules, with the addition of a cross-attention module to condition on the prompt" \cite{bolya2023tomesd}.\\
+"Stable Diffusion is based on a particular type of diffusion model called Latent Diffusion \cite{Rombach_2022_CVPR}. [...] Latent Diffusion can reduce the memory and compute complexity by applying the diffusion process over a lower dimensional latent space, instead of using the actual pixel space. This is the key difference between standard diffusion and latent diffusion models: in latent diffusion the model is trained to generate latent (compressed) representations of the images" \cite{patil2022stable}.\\
+
 
 
 \subsubsection{Transformer Architecture}
@@ -41,4 +40,4 @@ Inception model is biased. Inception model compresses images to 299x299 pixels. 
 
 
 \subsection{What are tokens?}
-In image synthesis, a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer\cite{radford2021learning} which defines a token as an $14 \times 14$ block of pixels. ---CLIP is trained with the ViT-L/14 model---
+In image synthesis, a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer \cite{radford2021learning} which defines a token as an $14 \times 14$ block of pixels. ---CLIP is trained with the ViT-L/14 model---

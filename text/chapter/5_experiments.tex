@@ -10,15 +10,15 @@ The performance is defined by\\
 \subsubsection*{Creating image datasets}
 The experiments always compare how diffusion time and image quality change across a spectrum of different volumes of tokens \((r)\) removed while token merging is applied in different layers of the transformer (self-attention, cross-attention and mlp).\\
 The images were generated with a "DiffusionPipeline" from HuggingFace's diffusers library \cite{von-platen-etal-2022-diffusers}, using the \href{https://huggingface.co/runwayml/stable-diffusion-v1-5}{"stable-diffusion-v1-5"} model \cite{Rombach_2022_CVPR}.\\
-We sampled multiple sets of \(n=500\) prompts from the dataset \href{https://huggingface.co/datasets/Gustavosta/Stable-Diffusion-Prompts}{"Stable-Diffusion-Prompts"} on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: \href{https://lexica.art}{Lexica.art}, and generated a corresponding set of random seeds.\\ 
-Prompts appearing multiple times within a set were not specifically prevented, due to the extremely low probability of a specific prompt-seed-pair appearing multiple times within a dataset. Same prompts with different seeds result in different images and therefore do not corrupt the validity of a dataset by our assessment.\\
+We sampled multiple sets of 500 prompts from the dataset \href{https://huggingface.co/datasets/Gustavosta/Stable-Diffusion-Prompts}{"Stable-Diffusion-Prompts"} on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: \href{https://lexica.art}{Lexica.art}, and generated a corresponding set of random seeds.\\ 
+Prompts appearing multiple times within a set was not specifically prevented, due to the extremely low probability of a specific prompt-seed-pair appearing multiple times within a dataset. Same prompts with different seeds result in different images and therefore do not corrupt the validity of a dataset by our assessment.\\
 Multiple images were created per prompt, with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\%, and 60\% (if possible) merge applied respectively, creating a set of 3,500 (or sometimes 3,000) images which can be split up into subsets of 500 images each for every merge volume.\\
 ---cfg scale? number diffusion steps?---
 
 
 
 \subsubsection*{Measuring results}
-For image quality, FID between a subset with \(r > 0\%\) and the subset with \(r = 0\%\) of the same dataset is computed, to see how ToMe performs with different values for \(r\).\\
+For image quality, the FID between a subset with \(r > 0\%\) and the subset with \(r = 0\%\) of the same dataset is computed, to examine how ToMe performs with different values for \(r\).\\
 The speed of image generation is assessed by recording the time taken to create each individual image and then calculating the average across all subsets.
 \begin{lstlisting}[language=Python]
 start = time.time()
@@ -30,19 +30,19 @@ time = end - start
 
 
 \subsubsection*{Hardware}
-All experiments were conducted with Nvidia GeForce GTX 1080 Ti GPUs. Individual images were always created on a single GPU.
+All experiments were conducted with Nvidia GeForce GTX 1080 Ti GPUs. Individual images were always generated on a single GPU.
 
 
 
 \subsection{Adjustments}
 \subsubsection*{FID}
-We created and used our own fork of pytorch-fid \cite{Seitzer2020FID} to accommodate for the hpc not being connected to the internet and therefore not being able to download the weights of the Inception model to calculate FID-values. Our fork loads these weights from a local directory to avoid any connection to the internet and requires the user to have them pre-installed.
+We created and used our own fork of pytorch-fid \cite{Seitzer2020FID} to accommodate for the hpc not being connected to the internet and therefore not being able to download the weights of the Inception model to calculate FID-values. Our version loads these weights from a local directory to avoid any connection to the internet and requires the user to have them pre-installed.
 
 
 
 \subsubsection*{Prompts}
 We shortened every prompt that exceeds 300 characters, in order to ensure that CLIP's token limit is not breached, as CLIP can only handle up to 77 tokens.
-This is done by determining the index (\(idx\)) of the last comma in the first 300 characters of every oversized prompt and then cutting off everything from this point onwards.
+This is accomplished by determining the index (\(idx\)) of the last comma in the first 300 characters of every oversized prompt and then cutting off everything from this point onwards.
 \begin{lstlisting}[language=Python]
 prompt = prompt[:idx]
 \end{lstlisting}
@@ -64,7 +64,7 @@ Additionally, Bolya and Hoffman also measured and analyzed the memory usage duri
 
 
 
-\newpage
+%\newpage
 \subsection{Comparison to Original Results}
 The great differences in experimental setups and hardware make it impossible to compare specific numbers. The general promises of ToMe for SD by Bolya and Hofmann can be confirmed though, as our results show that ToMe makes image generation up to $2 \times$ faster while still maintaining great image quality at \(r = 60\%\).\\
 \\
