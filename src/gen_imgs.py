@@ -70,7 +70,7 @@ for r, dir in zip(merge_volumes, directories):
         prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
         # create image
         start = time.time()
-        image = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed)).images[0]
+        image = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed), ).images[0]
         end = time.time()
         diff_time = end - start
         # save image

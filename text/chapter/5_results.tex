@@ -36,7 +36,7 @@ After \(1.1\), the question remains whether performance drops were caused by usi
 \label{fig:exp_1_2}
 \end{figure}\\
 %\newpage
-This time it's clearly visible that merging tokens within the self-attn and cross-attn module performs the best, both in terms of image quality and image generation speed, notably surpassing the default configuration established by \cite{bolya2023tomesd} (see Fig.~\ref{fig:exp_1_2}).\\
+This time it's clearly visible that merging tokens within the self-attn and cross-attn module performs the best, both in terms of image quality and image generation speed, notably surpassing the default configuration established by Bolya and Hofmann (see Fig.~\ref{fig:exp_1_2}).\\
 Token merging in the self-attn and mlp module on the other hand noticeably worsens the image quality across the board as well as the generation speed when $r<40\%$ compared to the default (see Tab.~\ref{table:exp_1_2}).\\
 We can therefore conclude that extending token merging to the cross-attn module has positive effects on the performance, while extending it to the mlp module has the opposite effect.
 
@@ -130,7 +130,7 @@ It can still be concluded that using the $1 \times 2$ batches to create an equal
 
 %\newpage
 \subsubsection*{4): Putting it all together}
-Finally, we are comparing the most successful configurations from the past experiments. That means we are looking at \textbf{setup 1}: the ToMe default by \cite{bolya2023tomesd} (black), \textbf{setup 2}: our new default with token merging expanded to the cross-attn layer from \(1.2\) and \(1.4\) (red), and \textbf{setup 3}: the new default but with $1 \times 2$ batches for token partitioning from \(3.2\) (blue).\\
+Finally, we are comparing the most successful configurations from the past experiments. That means we are looking at \textbf{setup 1}: the ToMe default by Bolya and Hofmann (black), \textbf{setup 2}: our new default with token merging expanded to the cross-attn layer from \(1.2\) and \(1.4\) (red), and \textbf{setup 3}: the new default but with $1 \times 2$ batches for token partitioning from \(3.2\) (blue).\\
 We expanded the image sets for the first two configurations to 1000 images per merge volume in \(1.4\), so we will do the same for the other one to enable examinations on a larger scale.
 \begin{figure}[!htb]
     \input{plots/plot7_fid}

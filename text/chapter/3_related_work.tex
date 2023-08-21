@@ -2,20 +2,18 @@
 
 
 \subsection*{Token Pruning}
-Several works have tried to utilize the transformer's flexibility when it comes to handling inconsistent amounts of tokens by pruning the tokens that are considered least important. These methods, unlike ToMe, require specific training for each model. "Moreover, most
+Several works have tried to utilize the transformer's flexibility when it comes to handling inconsistent amounts of tokens by pruning the tokens that are considered the least important \cite{meng2022adavit,yin2022vit}. These methods, unlike ToMe, require specific training for each model. "Moreover, most
 pruning works are dynamic, i.e., the number of tokens varies between images or sentences" \cite{bolya2023tome}. These fluctuations in token number improve accuracy, but make batching of different samples impossible and often require the use masks for training. The usage of those masks usually limits the speed-up that can be gained during training.\\
 ToMe does not suffer from these problems as the number of tokens always stays the same outside of transformer components and no training is required. Still, ToMe achieves speed-ups in both image generation and training of models.
 
 
 
 \subsection*{Combining Tokens}
-"While plenty of works prune tokens, very few combine them. \cite{kong2021spvit} and \cite{liang2022not} combine what they prune into a single token.\\ 
-GroupViT \cite{xu2022groupvit}, while not focused on efficiency, groups tokens using cross-attention for semantic segmentation.
-TokenLearner \cite{ryoo2021tokenlearner} uses an MLP to reduce the number of tokens.
-LIT \cite{pan2022less} learns deformable token merging layers for pooling between stages.\\
-Token Pooling \cite{marin2021token} is the most similar to our token merging but uses a slow k-means-based approach that does not work on an off-the-shelf model.\\
-Until now, no approach has been successful in offering a reasonable speed-accuracy trade-off when combining tokens without training" \cite{bolya2023tome}.
----Also works that try to combine tokens---
+Other works try to combine tokens instead of pruning them.
+There have been different approaches ranging from fusing less informative tokens into a single package token \cite{kong2021spvit, liang2022not}, over using an MLP with spatial attention for token reduction \cite{ryoo2021tokenlearner}, to using a learned deformable token merging module for adaptive token merging between stages \cite{pan2022less}.\\
+The most similar method to ToMe is Token Pooling by \cite{marin2021token}, though it does again require specific finetuning. Token Pooling reduces the number of tokens to \(K\) by using k-means to cluster the tokens into \(K\) clusters. In this case the cluster centers represent the new tokens.\\
+"Until now, no approach has been successful in offering a reasonable speed-accuracy trade-off when combining tokens without training" \cite{bolya2023tome}.
+
 
 
 \subsection*{Efficient Transformers?}

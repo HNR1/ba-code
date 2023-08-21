@@ -1,5 +1,5 @@
 \section{Experimental Procedures}
-We perform several experiments using the model "stable-diffusion-v1-5" by runwayml \cite{Rombach_2022_CVPR} and applying ToMe in different ways to a set of prompts and measuring the performance.
+We perform several experiments involving the creation of image datasets using the model \href{https://huggingface.co/runwayml/stable-diffusion-v1-5}{Stable Diffusion v1.5} by runwayml \cite{Rombach_2022_CVPR} and applying ToMe in different ways, then assessing the performance.
 The performance is defined by\\ 
 \(1)\) speed: the average diffusion time for every image of the set and\\
 \(2)\) image quality: the FID-value between sets of images that had token merging applied and their counterparts (that is same prompt, seed and image size) that didn't use any token merging.
@@ -8,12 +8,11 @@ The performance is defined by\\
 
 \subsection{Setup}
 \subsubsection*{Creating image datasets}
-The experiments always compare how diffusion time and image quality change across a spectrum of different volumes of tokens \((r)\) removed while token merging is applied in different layers of the transformer (self-attention, cross-attention and mlp).\\
-The images were generated with a "DiffusionPipeline" from HuggingFace's diffusers library \cite{von-platen-etal-2022-diffusers}, using the \href{https://huggingface.co/runwayml/stable-diffusion-v1-5}{"stable-diffusion-v1-5"} model \cite{Rombach_2022_CVPR}.\\
+The experiments always compare how diffusion time and image quality change across a spectrum of different volumes of tokens \((r)\) removed.\\
+The images were generated with a "DiffusionPipeline" from HuggingFace's diffusers library \cite{von-platen-etal-2022-diffusers}, using the Stable Diffusion v1.5 model.\\
 We sampled multiple sets of 500 prompts from the dataset \href{https://huggingface.co/datasets/Gustavosta/Stable-Diffusion-Prompts}{"Stable-Diffusion-Prompts"} on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: \href{https://lexica.art}{Lexica.art}, and generated a corresponding set of random seeds.\\ 
 Prompts appearing multiple times within a set was not specifically prevented, due to the extremely low probability of a specific prompt-seed-pair appearing multiple times within a dataset. Same prompts with different seeds result in different images and therefore do not corrupt the validity of a dataset by our assessment.\\
 Multiple images were created per prompt, with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\%, and 60\% (if possible) merge applied respectively, creating a set of 3,500 (or sometimes 3,000) images which can be split up into subsets of 500 images each for every merge volume.\\
----cfg scale? number diffusion steps?---
 
 
 
@@ -36,7 +35,7 @@ All experiments were conducted with Nvidia GeForce GTX 1080 Ti GPUs. Individual 
 
 \subsection{Adjustments}
 \subsubsection*{FID}
-We created and used our own fork of pytorch-fid \cite{Seitzer2020FID} to accommodate for the hpc not being connected to the internet and therefore not being able to download the weights of the Inception model to calculate FID-values. Our version loads these weights from a local directory to avoid any connection to the internet and requires the user to have them pre-installed.
+We use our \href{https://github.com/HNR1/pytorch_fid}{own fork} of pytorch-fid \cite{Seitzer2020FID} for FID calculation, in order to accommodate for the HPC not being connected to the internet and therefore not being able to download the weights of the Inception model. Our version loads these weights from a local directory to avoid any connection to the internet and requires the user to have them pre-installed. Some path variables also needed adjustment for usage on the HPC.
 
 
 
@@ -50,10 +49,10 @@ prompt = prompt[:idx]
 
 %\newpage
 \subsection{Comparison to Original Setup}
-\cite{bolya2023tomesd} structure their experiments as follows: "We use Stable diffusion v1.5 to generate 2,000 $512 \times 512$ images of ImageNet-1k \cite{deng2009imagenet} classes (2 per class) using 50 PLMS \cite{liu2022pseudo} diffusion steps with a cfg scale \cite{dhariwal2021diffusion} of 7.5. We then compute FID scores between those 2,000 samples and 5,000 class-balanced ImageNet-1k val examples using \cite{Seitzer2020FID}. To test speed, we simply average the time taken over all 2,000 samples on a single 4090 GPU."\\
+Bolya and Hofmann also used the Stable Diffusion v1.5 model to generate their images. They created 2,000 $512 \times 512$ images (2 per ImageNet-1k class \cite{deng2009imagenet}) and then computed the FID values between their images and a class-balanced selection of 5,000 images from the ImageNet-1k dataset using pytorch-fid \cite{Seitzer2020FID}. Their images were generated with 50 diffusion steps and a cfg scale of 7.5, matching our setup. Speed measurements were taken by averaging the diffusion time over all 2,000 samples. All their images were created on a single 4090 GPU.\\
 \\
 %\newpage
-The most notable difference to our setup is that we compare a set of merged images with their own unmerged versions, while Bolya and Hoffman's approach compares image sets of the same categories but does not directly try to measure alterations of images created by ToMe.\\
+The most notable difference to our setup is that we compare a set of merged images with their own unmerged versions, while Bolya and Hoffman's approach compares image sets of the same categories but does not directly try to measure alterations of images created by ToMe. Their GPU hardware also differs from ours, resulting in overall faster diffusion times in their experiments. The larger number of images in their trials also reduces the impact of FID's bias and leads to their results consistently showing lower FID values.\\
 Additionally, Bolya and Hoffman also measured and analyzed the memory usage during the diffusion process, while we left memory consumption completely out of the scope of this work.
 
 

@@ -1,5 +1,5 @@
 \section{Token Merging}
-In Token Merging for Stable Diffusion (ToMe) by \cite{bolya2023tomesd}, the number of tokens in a transformer is reduced by \(r\)\% through merging similar tokens before every diffusion step and unmerging them afterward to retain the original size of the image.\\
+In Token Merging for Stable Diffusion (ToMe) by \cite{bolya2023tomesd}, the number of tokens in a transformer is reduced by \(r\%\) through merging similar tokens before every diffusion step and unmerging them afterward to retain the original size of the image.\\
 The tokens are partitioned into a source (\textbf{src}) and a destination (\textbf{dst}) set, then the most similar tokens from the \textbf{src} set are continuously merged into their \textbf{dst} counterparts until the number of tokens has reduced by \(r\)\%.\\
 The choice of \(r\) is a trade-off between image fidelity and diffusion time as a lower amount of tokens requires a smaller computation time but more information about the image is lost in the merge process.\\
 The merge can be applied in different components of the transformer (i.e., self-attn, cross-attn, mlp) (see Fig.~\ref{fig:tome}).
@@ -48,9 +48,8 @@ In the subsequent steps, the two most similar tokens are chosen greedily and mer
 
 
 \subsection{Token Similarity}
-It is also relevant to define what "token similarity" exactly means. Bolya et al. explained: "While it may be tempting to call two tokens similar if the distance between their features is small, this is not necessarily optimal. The intermediate feature space in modern transformers is overparameterized. Luckily, transformers natively solve this problem with QKV self-attention \cite{vaswani2017attention}.\\
-Specifically, the keys (K) already summarize the information contained in each token for use in dot product similarity. Thus, we use cosine similarity between the keys of each token to determine which contain similar information" \cite{bolya2023tome}.
-
+It is also relevant to define what "token similarity" exactly means because you can not determine their similarity by measuring the distance between their features, as the intermediate feature space of transformers is usually overparameterized.
+We, for that reason, use a different similarity metric and utilize that the keys of the transformers self-attention summarize the information of each token. "Thus, we use cosine similarity between the keys of each token to determine which contain similar information" \cite{bolya2023tome}.
 
 
 
@@ -72,5 +71,5 @@ The \(r\) most similar tokens of \textbf{src} and \textbf{dst} can now be identi
 \subsection{Additional Technical Information}
 ToMe, in its basic form, only merges tokens in the self-attn block and defaults to using \(2 \times 2\) batches for token partitioning, with a randomly chosen \textbf{dst} token for every batch, resulting in a 75\% \textbf{src} and 25\% \textbf{dst} split. \\
 ToMe is also not applied in every network block, but only the ones with the most tokens. Bolya and Hoffman argued:
-"Applying ToMe to every block in the network is not ideal, since blocks at deeper U-Net scales have much fewer tokens. We try restricting ToMe to only blocks with some minimum number of tokens and find that only the blocks with the most tokens need ToMe applied to get most of the speed-up" \cite{bolya2023tomesd}.\\
-Bolya and Hoffman also contemplated to scale the volume of token merging within the diffusion process of an image, but they concluded to keep the amount of tokens merged the same for every diffusion step, stating: "It might not be right to reduce the same number of tokens in each diffusion step. Earlier diffusion steps are coarser and thus might be more forgiving to errors. We test this by linearly interpolating the percent of tokens reduced and find that indeed merging more tokens earlier and fewer tokens later is slightly better, but not enough to be worth it" \cite{bolya2023tomesd}.
+"We try restricting ToMe to only blocks with some minimum number of tokens and find that only the blocks with the most tokens need ToMe applied to get most of the speed-up" \cite{bolya2023tomesd}.\\
+Lastly, \(r\) remains consistent throughout the whole image generation process, as Bolya and Hofmann found out that merging more tokens during earlier diffusion steps and fewer during later steps does not provide a significant improvement to performance.
