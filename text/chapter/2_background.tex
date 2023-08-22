@@ -15,19 +15,19 @@ Stable Diffusion (SD) is a Latent Diffusion Model (LDM) which are used for image
 
 
 \subsubsection{The Autoencoder}
-A Variational Autoencoder (VAE) consists of two parts: the encoder and the decoder. "During latent diffusion training, the encoder is used to get the latent representations (latents) of the images for the forward diffusion process, which applies more and more noise at each step" \cite{patil2022stable}. The decoder conversely transforms the denoised latents back into an image at the end of the diffusion process. Only the decoder is used for the image generation process.
+A Variational Autoencoder (VAE) consists of two parts: the encoder and the decoder. "During latent diffusion training, the encoder is used to get the latent representations (latents) of the images for the forward diffusion process, which applies more and more noise at each step" \cite{patil2022stable}. The decoder conversely transforms the denoised latents, created by the U-Net, back into an image at the end of the diffusion process. Only the decoder is used for the image generation process.
 
 
 
 \subsubsection{The U-Net}
-The U-Net is type of Convolutional Neural Network (CNN) that is responsible for computing the expected noise of every image in every diffusion step. This expected noise is slowly removed from the image to get closer to the desired output with every denoising step. It's called a U-Net because it itself has an encoder and a decoder with transformer-based blocks. "It first encodes the current
-noised image as a set of tokens, then passes it through a
-series of transformer blocks" \cite{bolya2023tomesd}. Another thing that seperates a U-Net from an autoencoder are the skip connections that directly pass information from the encoder to the decoder, aiding in the preservation of details during upsampling (see Fig.~\ref{fig:ldm}). Every transformer block has a self attention (self-attn), cross attention (cross-attn) and multi-layer perceptron (mlp) module.
+The U-Net \cite{ronneberger2015u} is a type of Convolutional Neural Network (CNN) that is responsible for computing the expected noise of every image in every diffusion step. This expected noise is slowly removed from the noisy image to get closer to the desired output with every denoising step.\\
+The U-Net consists of an encoder and a decoder with transformer-based blocks. "Thus, it first encodes the current noised image as a set of tokens, then passes it through a series of transformer blocks" \cite{bolya2023tomesd}. The inclusion of transformer-based blocks allows the model to not only preserve the spacial hierarchies but also the semantic structure of the image.\\
+Another thing that distinguishes the U-Net from an autoencoder are the skip connections that directly pass information from the encoder to the decoder, aiding in the preservation of details during upsampling (see Fig.~\ref{fig:ldm}).
 
 
 
 \subsubsection{Transformer Architecture}
-Different components: Self-Attention (self-attn), Cross-Attention (cross-attn) and Multi-Layer Perceptron (mlp).
+Every transformer block has a self attention (self-attn), cross attention (cross-attn) and multi-layer perceptron (mlp) module.
 
 
 
@@ -37,7 +37,7 @@ Text.
 
 
 \subsubsection{The Text-Encoder}
-Text.
+The text-encoder is a transformer-based encoder that converts the input prompt from a string to an embedding vector that captures the semantic meaning of text and can also be interpreted by the U-Net. Stable Diffusion uses CLIP's \cite{radford2021learning} pre-trained text-encoder \href{https://huggingface.co/docs/transformers/model_doc/clip#transformers.CLIPTextModel}{CLIPTextModel} and thus avoids additional training of the text-encoder.
 
 
 
