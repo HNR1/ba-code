@@ -3,8 +3,26 @@
 
 
 \subsection{Stable Diffusion}
-"Diffusion models \cite{dhariwal2021diffusion, sohl2015deep, song2019generative} generate images by repeatedly denoising some initial noise over some number of diffusion steps. Like most modern large diffusion models, Stable Diffusion uses a U-Net \cite{ronneberger2015u} with transformer-based blocks. Thus, it first encodes the current noised image as a set of tokens, then passes it through a series of transformer blocks. Each transformer block has the standard self attention \cite{vaswani2017attention} and multi-layer perception (mlp) modules, with the addition of a cross-attention module to condition on the prompt" \cite{bolya2023tomesd}.\\
-"Stable Diffusion is based on a particular type of diffusion model called Latent Diffusion \cite{Rombach_2022_CVPR}. [...] Latent Diffusion can reduce the memory and compute complexity by applying the diffusion process over a lower dimensional latent space, instead of using the actual pixel space. This is the key difference between standard diffusion and latent diffusion models: in latent diffusion the model is trained to generate latent (compressed) representations of the images" \cite{patil2022stable}.\\
+Stable Diffusion (SD) is a Latent Diffusion Model (LDM) which are used for image generation. LDMs are trained to create a desired image by repeatedly denoising random gaussian noise. What separates LDMs from regular Diffusion Models though is that they apply the diffusion process in a lower-dimensional latent space instead of the pixel-space. This greatly alleviates the need for extensive resources, especially when generating larger images. LDMs have three main components: 1) the autoencoder, 2) the U-Net and 3) the text-encoder.
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]
+{static/LDM.png}
+\caption{LDM \cite[Fig.~3]{Rombach_2022_CVPR}.}
+\label{fig:ldm}
+\end{figure}
+
+
+
+\subsubsection{The Autoencoder}
+A Variational Autoencoder (VAE) consists of two parts: the encoder and the decoder. "During latent diffusion training, the encoder is used to get the latent representations (latents) of the images for the forward diffusion process, which applies more and more noise at each step" \cite{patil2022stable}. The decoder conversely transforms the denoised latents back into an image at the end of the diffusion process. Only the decoder is used for the image generation process.
+
+
+
+\subsubsection{The U-Net}
+The U-Net is type of Convolutional Neural Network (CNN) that is responsible for computing the expected noise of every image in every diffusion step. This expected noise is slowly removed from the image to get closer to the desired output with every denoising step. It's called a U-Net because it itself has an encoder and a decoder with transformer-based blocks. "It first encodes the current
+noised image as a set of tokens, then passes it through a
+series of transformer blocks" \cite{bolya2023tomesd}. Another thing that seperates a U-Net from an autoencoder are the skip connections that directly pass information from the encoder to the decoder, aiding in the preservation of details during upsampling (see Fig.~\ref{fig:ldm}). Every transformer block has a self attention (self-attn), cross attention (cross-attn) and multi-layer perceptron (mlp) module.
 
 
 
@@ -14,6 +32,11 @@ Different components: Self-Attention (self-attn), Cross-Attention (cross-attn) a
 
 
 \subsubsection{Attention and Self-Attention}
+Text.
+
+
+
+\subsubsection{The Text-Encoder}
 Text.
 
 
@@ -39,5 +62,5 @@ Inception model is biased. Inception model compresses images to 299x299 pixels. 
 
 
 
-\subsection{What are tokens?}
+\subsection{What are Tokens?}
 In image synthesis, a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer \cite{radford2021learning} which defines a token as an $14 \times 14$ block of pixels. ---CLIP is trained with the ViT-L/14 model---

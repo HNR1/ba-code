@@ -7,21 +7,11 @@ HPC_PATH = "/gpfs/scratch/hebal100"
 
 # save command line args
 assert len(sys.argv) >= 5
-MAIN_DIR = sys.argv[1] #'data/run5'
-sample_size = int(sys.argv[2]) # 50
-x, y =  int(sys.argv[3]), int(sys.argv[4]) # 768, 768
-
+MAIN_DIR = sys.argv[1]                      #'data/run5'
+sample_size = int(sys.argv[2])              # 50
+x, y =  int(sys.argv[3]), int(sys.argv[4])  # 768, 768
 try:
-    bool_string = sys.argv[5] #'TTF'
-    assert len(bool_string) == 3
-except IndexError:
-    bool_string = 'TFF' 
-bool_sa = False if bool_string[0] == 'F' else True
-bool_ca = True if bool_string[1] == 'T' else False
-bool_mlp = True if bool_string[2] == 'T' else False
-
-try:
-    src_file = sys.argv[6] #'run8/logger/log_51gIp.csv'
+    src_file = sys.argv[5]                  #'run8/logger/log_51gIp.csv'
 except IndexError:
     src_file = None          
 
@@ -37,12 +27,12 @@ else:
     seeds = pd.read_csv(f'{HPC_PATH}/data/{src_file}')['seed'].values
 
 # method for cutting oversized prompts
-def cut_prompt(prompt, max_len=300, char=','):
+def cut_prompt(prompt, max_len=300, delimiter=','):
     if len(prompt) <= max_len:
         return prompt
     
-    idx = prompt[:max_len].rfind(char)
-    # catch if char isn't used
+    idx = prompt[:max_len].rfind(delimiter)
+    # catch if delimiter isn't used
     if idx <= 0:
         idx = prompt[:max_len].rfind(' ')
 
@@ -62,7 +52,6 @@ merge_volumes = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50', 'images_60']
 logger = []
 
-MAIN_DIR = 'data/run17'
 # run image generation loop to create image sets
 for r, dir in zip(merge_volumes, directories):
     tomesd.apply_patch(pipeline, r, sx=2, sy=2, merge_attn=True, merge_crossattn=False, merge_mlp=False)
@@ -71,30 +60,6 @@ for r, dir in zip(merge_volumes, directories):
         # create image
         start = time.time()
         image = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed), ).images[0]
-        end = time.time()
-        diff_time = end - start
-        # save image
-        name = 'img_' + ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        image.save(f'{HPC_PATH}/{MAIN_DIR}/{dir}/{name}.png')
-        # create new log entry
-        logger.append([prompt, seed, r, diff_time, name])       
-tomesd.remove_patch(pipeline)
-
-# save log
-log = pd.DataFrame(logger, columns=['prompt', 'seed', 'm_vol', 'time', 'name'])
-name = 'log_' + ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-log.to_csv(f'{HPC_PATH}/{MAIN_DIR}/logger/{name}.csv', index=False)
-
-logger = []
-MAIN_DIR = 'data/run18'
-# run image generation loop to create image sets
-for r, dir in zip(merge_volumes, directories):
-    tomesd.apply_patch(pipeline, r, sx=2, sy=2, merge_attn=True, merge_crossattn=True, merge_mlp=False)
-    for i in range(sample_size):
-        prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
-        # create image
-        start = time.time()
-        image = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed)).images[0]
         end = time.time()
         diff_time = end - start
         # save image
