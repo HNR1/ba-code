@@ -17,7 +17,7 @@ The naive idea here is to improve performance by using token merging in every tr
 \label{fig:exp_1_1}
    \input{plots/plot1_fid}
    \input{plots/plot1_time}
-\caption{FID and time for 1.1)}
+\caption{FID and relative time compared to r=0\% for 1.1)}
 \label{fig:exp_1_1}
 \end{figure}\\
 %\newpage
@@ -32,7 +32,7 @@ After \(1.1\), the question remains whether performance drops were caused by usi
 \begin{figure}[!htb]
     \input{plots/plot2_fid}
     \input{plots/plot2_time}
-\caption{FID and time for 1.2)}
+\caption{FID and relative time compared to r=0\% for 1.2)}
 \label{fig:exp_1_2}
 \end{figure}\\
 %\newpage
@@ -47,9 +47,9 @@ We can therefore conclude that extending token merging to the cross-attn module 
 The common denominator of the previous examinations was the application of token merging in the self-attn layer. This time we are explicitly avoiding token merging in the self-attn module and instead apply it in only the cross-attn (blue) and both the cross-attn and mlp component (red).
 The results of the default ToMe settings (black) again carry over from the previous trial.\\
 \begin{figure}[!htb]
-    \input{plots/plot5_fid}
-    \input{plots/plot5_time}
-\caption{FID and time for 1.3)}
+    \input{plots/plot3_fid}
+    \input{plots/plot3_time}
+\caption{FID and relative time compared to r=0\% for 1.3)}
 \label{fig:exp_1_3}
 \end{figure}\\
 The most striking result here is that no token merging in the self-attn layer corresponds to no image generation speedup at all, rather slowing the process down (see Tab.~\ref{table:exp_1_3}). 
@@ -64,9 +64,9 @@ We conclusively derive that ToMe without involvement of the self-attn layer does
 The most prominent takeaway of the first three experiments is that token merging in both the self-attn and cross-attn layers improves the performance of ToMe both in terms of image quality and image generation speed.\\
 We want to further examine this discovery by repeating the experiment with a new set of 500 different prompt-seed pairs and then average the results of both trials.
 \begin{figure}[!htb]
-    \input{plots/plot3_fid}
-    \input{plots/plot3_time}
-\caption{FID and time for 1.4)}
+    \input{plots/plot4_fid}
+    \input{plots/plot4_time}
+\caption{FID and relative time compared to r=0\% for 1.4)}
 \label{fig:exp_1_4}
 \end{figure}\\
 %\newpage
@@ -79,9 +79,9 @@ This motivates the use of token merging in both the self-attn and cross-attn mod
 \subsubsection*{2): Exploring smaller images sizes}
 In this section, we want to expand the scope of our trials to smaller image sizes. Precisely, we want to repeat looking at token merging in the self-attn layer (black) and both the self-attn and cross-attn layer (red), but this time with smaller $512 \times 512$ images. Again a set of 500 prompts is randomly sampled and a corresponding set of random seeds is generated.
 \begin{figure}[!htb]
-    \input{plots/plot4_fid}
-    \input{plots/plot4_time}
-\caption{FID and time for 2)}
+    \input{plots/plot5_fid}
+    \input{plots/plot5_time}
+\caption{FID and relative time compared to r=0\% for 2)}
 \label{fig:exp_2}
 \end{figure}\\
 %\newpage
@@ -118,7 +118,7 @@ This limits our merge volume to 50\% but allows for better matches during the me
 \begin{figure}[!htb]
     \input{plots/plot6_fid}
     \input{plots/plot6_time}
-\caption{FID and time for 3)}
+\caption{FID and relative time compared to r=0\% for 3)}
 \label{fig:exp_3}
 \end{figure}\\
 The resizing of the batches has only minor effects on image generation speed, as all three configurations consistently remain within one second of each other (see Tab.~\ref{table:exp_3}).\\
@@ -135,7 +135,7 @@ We expanded the image sets for the first two configurations to 1000 images per m
 \begin{figure}[!htb]
     \input{plots/plot7_fid}
     \input{plots/plot7_time}
-\caption{FID and time for 4)}
+\caption{FID and relative time compared to r=0\% for 4)}
 \label{fig:exp_4}
 \end{figure}\\
 Again, speed is very close across the board, as \textbf{setup 2} is the fastest by only a small margin (see Tab.~\ref{table:exp_4}).

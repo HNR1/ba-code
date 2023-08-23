@@ -1,0 +1,37 @@
+\begin{table}[htp]
+\caption{[default] vs [cross-attn \& mlp] vs [only cross-attn]}
+\label{table:exp_1_3}
+    \begin{minipage}{0.4\textwidth}
+        %\centering
+        \begin{tabular}{|c||c|c|c|}
+            \hline
+            \multicolumn{1}{|c||}{r\%} & \multicolumn{3}{c|}{FID}\\
+            \hline
+            0 & 0 & 0 & 0 \\
+            10 & 29.95 & 21.46 & 3.05 \\
+            20 & 40.26 & 32.45 & 4.29 \\
+            30 & 47.74 & 39.86 & 6.01 \\
+            40 & 53.48 & 46.06 & 7.49 \\
+            50 & 58.19 & 52.48 & 9.50 \\
+            60 & 62.46 & 57.71 & 11.16 \\
+            \hline
+        \end{tabular}
+    \end{minipage}
+    %\hfill
+    \begin{minipage}{0.4\textwidth}
+        %\centering
+        \begin{tabular}{|c||c|c|c|}
+            \hline
+            \multicolumn{1}{|c||}{r\%} & \multicolumn{3}{c|}{s/im (\% to r=0\%)}\\
+            \hline
+            0 & 70.74 (100) & 70.78 (100) & 69.99 (100) \\
+            10 & 63.28 (89.45) & 71.94 (101.64) & 70.85 (101.23) \\
+            20 & 55.64 (78.65) & 71.76 (101.38) & 70.78 (101.13) \\
+            30 & 48.42 (68.45) & 71.58 (101.13) & 70.74 (101.07) \\
+            40 & 42.97 (60.74) & 71.45 (100.95) & 70.91 (101.31) \\
+            50 & 37.04 (52.36) & 70.88 (100.14) & 70.57 (100.83) \\
+            60 & 34.35 (48.56) & 70.64 (99.80) & 70.52 (100.76) \\
+            \hline
+        \end{tabular}
+    \end{minipage}
+\end{table}

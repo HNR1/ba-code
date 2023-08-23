@@ -1,19 +1,19 @@
-% time values for run10 and run11
+% time values for run2, run6 and run7
 \begin{tikzpicture}
 \begin{axis}[
     title={},
     height=5cm,
     width=7.5cm,
     xlabel={r\%},
-    ylabel={s/im},
-    xmin=0, xmax=65,
-    ymin=30, ymax=75,
-    xtick={0,10,20,30,40,50,60},
-    ytick={30,40,50,60,70},
-    legend pos=north east,
+    ylabel={time (\%)},
+    xmin=5, xmax=65,
+    ymin=45, ymax=105,
+    xtick={10,20,30,40,50,60},
+    ytick={40,50,60,70,80,90,100},
+    legend pos=south west,
     xmajorgrids=true,
     ymajorgrids=true,
-    legend style={font=\footnotesize}
+    legend style={font=\scriptsize}
 ]
 
 \addplot[
@@ -21,7 +21,7 @@
     mark=*
     ]
     coordinates {
-    (0,70.76)(10,63.36)(20,55.75)(30,48.53)(40,43.10)(50,37.29)(60,34.32)
+    (0,100)(10,89.45)(20,78.65)(30,68.45)(40,60.74)(50,52.36)(60,48.56)
     };
     
 \addplot[
@@ -29,10 +29,18 @@
     mark=*
     ]
     coordinates {
-    (0,69.88)(10,62.57)(20,55.19)(30,47.97)(40,42.07)(50,36.40)(60,33.16)
+    (0,100)(10,101.64)(20,101.38)(30,101.13)(40,100.95)(50,100.14)(60,99.80)
+    };
+
+\addplot[
+    color=blue,
+    mark=*
+    ]
+    coordinates {
+    (0,100)(10,101.23)(20,101.13)(30,101.07)(40,101.31)(50,100.83)(60,100.76)
     };
     
-\legend{default, s-a \& c-a}
+\legend{default, c-a \& mlp, c-a}
     
 \end{axis}
 \end{tikzpicture}

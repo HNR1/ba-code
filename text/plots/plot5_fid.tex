@@ -1,4 +1,4 @@
-% FID values for run2, run6 and run7
+% FID values for run8 and run9
 \begin{tikzpicture}
 \begin{axis}[
     title={},
@@ -7,13 +7,13 @@
     xlabel={r\%},
     ylabel={FID},
     xmin=5, xmax=65,
-    ymin=0, ymax=70,
+    ymin=38, ymax=72,
     xtick={10,20,30,40,50,60},
-    ytick={0,10,20,30,40,50,60},
-    legend pos=north west,
+    ytick={30,40,50,60,70},
+    legend pos=south east,
     xmajorgrids=true,
     ymajorgrids=true,
-    legend style={font=\scriptsize}
+    legend style={font=\footnotesize}
 ]
 
 \addplot[
@@ -21,7 +21,7 @@
     mark=*
     ]
     coordinates {
-    (0,0)(10,29.95)(20,40.26)(30,47.47)(40,53.48)(50,58.19)(60,62.46)
+    (0,0)(10,41.06)(20,49.80)(30,55.03)(40,59.10)(50,63.89)(60,68.30)
     };
     
 \addplot[
@@ -29,19 +29,10 @@
     mark=*
     ]
     coordinates {
-    (0,0)(10,21.46)(20,32.45)(30,39.86)(40,46.06)(50,52.48)(60,57.71)
+    (0,0)(10,41.45)(20,48.45)(30,54.39)(40,59.16)(50,63.09)(60,67.53)
     };
-
-\addplot[
-    color=blue,
-    mark=*
-    ]
-    coordinates {
-    (0,0)(10,3.05)(20,4.29)(30,6.01)(40,7.49)(50,9.50)(60,11.16)
-    };
-
     
-\legend{default, c-a \& mlp, c-a}
+\legend{default, s-a \& c-a}
     
 \end{axis}
 \end{tikzpicture}

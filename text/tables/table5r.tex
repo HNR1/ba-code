@@ -1,0 +1,37 @@
+\begin{table}[htp]
+\caption{[default] vs [self-attn \& cross-attn] $(512 \times 512)$}
+\label{table:exp_2}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tabular}{|c||c|c|}
+            \hline
+            \multicolumn{1}{|c||}{r\%} & \multicolumn{2}{c|}{FID}\\
+            \hline
+            0 & 0 & 0 \\
+            10 & 41.06 & 41.45 \\
+            20 & 49.80 & 48.45 \\
+            30 & 55.03 & 54.39 \\
+            40 & 59.10 & 59.16 \\
+            50 & 63.39 & 63.09 \\
+            60 & 68.30 & 67.53 \\
+            \hline
+        \end{tabular}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tabular}{|c||c|c|}
+            \hline
+            \multicolumn{1}{|c||}{r\%} & \multicolumn{2}{c|}{s/im (\% to r=0\%)}\\
+            \hline
+            0 & 16.92 (100) & 17.61 (100) \\
+            10 & 18.08 (106.86) & 18.39 (104.43) \\
+            20 & 16.31 (96.39) & 16.70 (94.83) \\
+            30 & 15.32 (90.54) & 15.59 (88.53) \\
+            40 & 14.35 (84.81) & 14.67 (83.30) \\
+            50 & 12.93 (76.42) & 13.33 (75.70) \\
+            60 & 12.75 (75.35) & 12.86 (73.03) \\
+            \hline
+        \end{tabular}
+    \end{minipage}
+\end{table}
