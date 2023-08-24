@@ -1,6 +1,6 @@
 The baseline is to look at the effects of ToMe (with default settings) applied to $768 \times 768$ images. The experiments can be split up into three different parts inspecting how ToMe affects performance\\ \(1)\) when applied to different parts of the transformer,\\ \(2)\) when applied to smaller $512 \times 512$ images, and\\ \(3)\) when different settings for partitioning the \textbf{src} and \textbf{dst} sets are used.\\
 \\
-The results of every experimental unit are presented in two figures. The first figure focuses on image quality, displaying FID values, while the subsequent one emphasizes image generation speed by showcasing the average time required for image generation.
+The results of every experimental unit are presented in two figures. The first figure focuses on image quality, displaying FID values, while the subsequent one emphasizes image generation speed by showcasing how the average time required for image generation of each subset compares to the \(r=0\%\) subset.
 Both figures have \(r\%\) on the x-axis showing how the metrics change with an increasing amount of tokens merged.
 
 \subsubsection*{1): Experimenting with different components of the transformer}
