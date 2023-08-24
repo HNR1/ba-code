@@ -66,13 +66,8 @@ A multi-layer perceptron is a fully connected neural network. The mlp layer take
 
 
 
-\subsubsection{Training?}
-Forward diffusion. Noise is added to an image. NN trained on it.
-
-
-
 \subsection{Fréchet-Inception-Distance}
-The Fréchet Inception Distance (FID) is a metric that is used to evaluate the quality of generated images. It provides a quantitative measure of the similarity between the distributions of two sets of images.\\
+The Fréchet Inception Distance (FID) is a metric that is used to evaluate the quality of generated images. It provides a quantitative measure of similarity by calculating the distance between the distributions of feature vectors of two image datasets. The feature vectors are extracted from the Inception model and the mean and covariance of their distributions are calculated.\\
 "We call the Fréchet distance \(d(., .)\)
 between the Gaussian with mean \((m, C)\) obtained from \(p(.)\) and the Gaussian with mean \((m_w, C_w)\)
 obtained from \(p_w(.)\) the “Fréchet Inception Distance” (FID), which is given by:
@@ -80,18 +75,20 @@ obtained from \(p_w(.)\) the “Fréchet Inception Distance” (FID), which is g
     d^2((m,C),(m_w,C_w)) = || m - m_w ||_2^2 + Tr(C+C_w-2(CC_w)^\frac{1}{2})" 
 \end{align*}
 \cite{heusel2017gans}.\\
-
+A lower FID value indicates greater similarity between the two image sets.
 
 
 
 \subsubsection{Inception Model}
-Text.
-
+The Inception model \cite{Szegedy_2015_CVPR} is a deep convolutional neural network developed by Google researchers that is pretrained on ImageNet \cite{deng2009imagenet}. The model improves performance and efficiency in image classification and computer vision tasks by using multiple convolutional filter operations at different scales within the same layer.\\
+The Inception model is used in the context of FID for creating low-dimensional latent representations of the input images, utilizing its ability to capture meaningful image features.
+Current code implementations such as \cite{Seitzer2020FID} use the model's third iteration Inception-v3 \cite{szegedy2016rethinking}.
 
 
 
 \subsubsection{Caveats}
-Inception model is biased. Inception model compresses images to 299x299 pixels. FID inconsistent with ToMe applied (not exactly reproducable)
+FID is statistically biased, with its bias growing inversely proportional to the size of image set, and the bias also depending on the model that is used for feature extraction \cite{Chong_2020_CVPR}. This makes comparing specific FID values from different experiments impossible, when identical sample sizes or the use of the same model are not guaranteed.\\
+A further limitation of FID is the Inception model's compression of images to $299 \times 299$ pixels \cite{szegedy2016rethinking}. Thus, assessing the quality of larger images is additionally hindered as information about the images is lost by the compression.
 
 
 

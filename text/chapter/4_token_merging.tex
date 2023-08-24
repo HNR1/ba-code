@@ -73,3 +73,9 @@ ToMe, in its basic form, only merges tokens in the self-attn block and defaults 
 ToMe is also not applied in every network block, but only the ones with the most tokens. Bolya and Hoffman argued:
 "We try restricting ToMe to only blocks with some minimum number of tokens and find that only the blocks with the most tokens need ToMe applied to get most of the speed-up" \cite{bolya2023tomesd}.\\
 Lastly, \(r\) remains consistent throughout the whole image generation process, as Bolya and Hofmann found out that merging more tokens during earlier diffusion steps and fewer during later steps does not provide a significant improvement to performance.
+
+
+
+\subsubsection*{Image inconsistencies}
+The usage of ToMe curiously prevents exact reproduction of the subsequent experiments, as minor randomness is involved in the image generation, even when \textbf{use\_rand\\=False} is set. We were not able to determine why this randomness occurs. The
+variances are detectable by FID, but invisible to the human eye.
