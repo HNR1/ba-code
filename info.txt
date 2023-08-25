@@ -30,6 +30,6 @@ run 15: 500 768x768 images, self-attn and cross-attn, 1x2 strides, [0, 0.1, 0.2,
 
 run 16: 500 768x768 images, self-attn and cross-attn, 1x2 strides, [0, 0.1, 0.2, 0.3, 0.4, 0.5] merge volumes, [repeat ds1]
 
-run 17: 50 512x512 images, self-attn and cross-attn, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes, [repeat ds5]
+run 17: 50 512x512 images, self-attn and cross-attn, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes, [test-repeat ds5]
 
-run 18: 50 512x512 images, only self-attn (default), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes, [repeat ds5]
+run 18: 50 512x512 images, only self-attn (default), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] merge volumes, [test-repeat ds5]
