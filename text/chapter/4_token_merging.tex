@@ -49,13 +49,13 @@ In the subsequent steps, the two most similar tokens are chosen greedily and mer
 
 \subsection{Token Similarity}
 It is also relevant to define what "token similarity" exactly means because you can not determine their similarity by measuring the distance between their features, as the intermediate feature space of transformers is usually overparameterized.
-We, for that reason, use a different similarity metric and utilize that the keys of the transformers self-attention summarize the information of each token. "Thus, we use cosine similarity between the keys of each token to determine which contain similar information" \cite{bolya2023tome}.
+For that reason, a different similarity metric is necessary. \cite{bolya2023tome} tried to utilize that the keys of the transformers self-attention summarize the information of each token and therefore determined similarity by computing the cosine similarity between the keys of each token. ToMe for SD though, moves away from proportional attention and computes the cosine similarity between the \textbf{src} and \textbf{dst} set created from the inputs to the block \(x\), instead of the aforementioned keys. The similarities are only computed once at the beginning of each transformer block.
 
 
 
 %\newpage
 \subsubsection*{Computing cosine similarity}
-ToMe extracts the hidden states tensor (\(M\)) of the image and normalizes it before its \(split\) into two tensors (\(S\) and \(D\)), separating the \textbf{src} and \textbf{dst} tokens.
+The token tensor (\(M\)) is normalized and then \(split\) into two tensors (\(S\) and \(D\)), separating the \textbf{src} and \textbf{dst} tokens.
 Continuing from there, the cosine similarity (\(scores\)) between every \textbf{src} and \textbf{dst} token is computed by taking the dot product of \(S\) and \(D\).
 \begin{lstlisting}[language=Python]
 M = M / M.norm(dim=-1, keepdim=True)

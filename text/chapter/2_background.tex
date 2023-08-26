@@ -93,4 +93,4 @@ A further limitation of FID is the Inception model's compression of images to $2
 
 
 \subsection{What are Tokens?}
-In image synthesis, a token is a block of pixels that are processed collectively by the transformer. Stable Diffusion uses the CLIP tokenizer \cite{radford2021learning} which defines a token as an $14 \times 14$ block of pixels. ---CLIP is trained with the ViT-L/14 model---
+Tokens are semantic units that can be processed by transformer-based models such as Stable Diffusion. Text, such as the prompt in image generation, is tokenized into words or subwords, which are then mapped to an embedding vector by the text-encoder. Image tokens capture discrete representations of their specific visual elements, with each token encoding a certain aspect of the image, such as a particular object, texture, color, or spatial region. This breakdown into smaller units is necessary for efficient computations and memory management, additionally enabling these algorithms to better capture patterns and relationships within the data.
