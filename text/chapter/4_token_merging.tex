@@ -56,12 +56,10 @@ We, for that reason, use a different similarity metric and utilize that the keys
 %\newpage
 \subsubsection*{Computing cosine similarity}
 ToMe extracts the hidden states tensor (\(M\)) of the image and normalizes it before its \(split\) into two tensors (\(S\) and \(D\)), separating the \textbf{src} and \textbf{dst} tokens.
+Continuing from there, the cosine similarity (\(scores\)) between every \textbf{src} and \textbf{dst} token is computed by taking the dot product of \(S\) and \(D\).
 \begin{lstlisting}[language=Python]
 M = M / M.norm(dim=-1, keepdim=True)
 S, D = split(M)
-\end{lstlisting}
-Continuing from there, the cosine similarity (\(scores\)) between every \textbf{src} and \textbf{dst} token is computed by taking the dot product of \(S\) and \(D\).
-\begin{lstlisting}[language=Python]
 scores = S @ D.transpose(-1, -2)
 \end{lstlisting}
 The \(r\) most similar tokens of \textbf{src} and \textbf{dst} can now be identified by the indices of the largest values of the \(scores\) tensor.

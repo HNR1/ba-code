@@ -6,6 +6,30 @@
 \usepackage{pgfplots}
 \usepackage{flafter}
 \usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.94,0.94,0.95}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
 \usepackage{breakcites}
 \usepackage[font=footnotesize]{caption}
 \usepackage[T1]{fontenc}
@@ -56,14 +80,10 @@
 \newpage
 \appendix
 \pagenumbering{gobble}
-\section{Libraries and Versions}
-PyTorch: 1.13.0\\
-Diffusers: 0.18.2\\
-Transformers: 4.30.2\\
-NumPy: 1.19.5\\
-SciPy: 1.10.1\\
-tomesd: 0.1.3\\
-pytorch-fid (fork): 0.3.0\\
+\section{Libraries and Code}
+\input{chapter/appendix/libraries}
+\\
+\input{chapter/appendix/code}
 
 \newpage
 \section{Tables}

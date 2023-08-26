@@ -4,7 +4,8 @@ import pandas as pd
 from libs.pytorch_fid.src.fid.fid_score import calculate_fid_given_paths
 
 HPC_PATH = "/gpfs/scratch/hebal100"
-DATA_PATH = sys.argv[1] #'data/run2'
+DATA_PATH = sys.argv[1] 
+# directories where images of certain merge volume are saved
 directories = ['images_0', 'images_10', 'images_20', 'images_30', 'images_40', 'images_50', 'images_60']
 m_vols = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 perf_values = []

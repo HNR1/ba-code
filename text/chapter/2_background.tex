@@ -21,7 +21,7 @@ A Variational Autoencoder (VAE) consists of two parts: the encoder and the decod
 
 \subsubsection{The U-Net}
 The U-Net \cite{ronneberger2015u} is a type of Convolutional Neural Network (CNN) that is responsible for predicting the noise in the current sample image. The image generation process starts with a random sample image of gaussian noise. The U-Net then takes this sample \((latents)\) and predicts the noise residual \((noise\_pred)\) of the image. 
-A reduced amount (determined by \(sigma\)) of this noise residual is removed in every step, until we end up with the final fully denoised image (see Fig.~\ref{fig:ldm}).
+This noise residual is partially \((sigma)\) removed in every step, until we end up with the final fully denoised image (see Fig.~\ref{fig:ldm}).
 \begin{lstlisting}[language=Python]
 latens = latents - sigma * noise_pred
 \end{lstlisting}
