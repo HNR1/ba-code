@@ -15,14 +15,6 @@
     ymajorgrids=true,
     legend style={font=\footnotesize}
 ]
-
-\addplot[
-    color=blue,
-    mark=*
-    ]
-    coordinates {
-    (0,100)(10,88.54)(20,77.42)(30,66.88)(40,57.97)(50,49.42)(60,44.78)
-    };
     
 \addplot[
     color=black,
@@ -40,9 +32,16 @@
     (0,100)(10,89.55)(20,78.82)(30,68.70)(40,60.24)(50,51.94)(60,47.21)
     };
 
+\addplot[
+    color=blue,
+    mark=*
+    ]
+    coordinates {
+    (0,100)(10,88.54)(20,77.42)(30,66.88)(40,57.97)(50,49.42)(60,44.78)
+    };
 
     
-\legend{s-a \& mlp, default, s-a \& c-a}
+\legend{default, s-a \& c-a, s-a \& mlp}
     
 \end{axis}
 \end{tikzpicture}

@@ -17,14 +17,6 @@
 ]
 
 \addplot[
-    color=blue,
-    mark=*
-    ]
-    coordinates {
-    (0,0)(10,31.81)(20,41.16)(30,49.59)(40,54.94)(50,60.41)(60,66.63)
-    };
-
-\addplot[
     color=black,
     mark=*
     ]
@@ -40,8 +32,15 @@
     (0,0)(10,29.24)(20,39.55)(30,46.73)(40,52.34)(50,57.05)(60,61.64)
     };
 
+\addplot[
+    color=blue,
+    mark=*
+    ]
+    coordinates {
+    (0,0)(10,31.81)(20,41.16)(30,49.59)(40,54.94)(50,60.41)(60,66.63)
+    };
     
-\legend{s-a \& mlp, default, s-a \& c-a}
+\legend{default, s-a \& c-a, s-a \& mlp}
     
 \end{axis}
 \end{tikzpicture}
