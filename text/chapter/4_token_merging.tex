@@ -35,9 +35,15 @@ Bipartite-Soft-Matching involves two main steps. First, the tensor of tokens is 
 
 
 \subsubsection*{Choosing src and dst}
-The grid of tokens is partitioned into a grid of \(sx \times sy\) batches of tokens.\\
-Within every batch one token is chosen for the \textbf{dst} set with the rest now belonging to the \textbf{src} set. The choice is either random (default) or the top left token is always chosen when the parameter \textbf{use\_rand=False} is set.\\
-\\
+The grid of tokens is partitioned into a grid of \(sx \times sy\) batches of tokens.
+Within every batch one token is chosen for the \textbf{dst} set (blue) with the rest now belonging to the \textbf{src} set (red). The choice is random by default, alternatively the top left token is always chosen when the parameter \textbf{use\_rand=False} is set (see Fig.~\ref{fig:src-dst}).
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.75\textwidth]
+{static/src_dst_part.png}
+\caption{Partitioning of tokens into \textbf{src} and \textbf{dst} \cite[Fig. 5]{bolya2023tome}}
+\label{fig:src-dst}
+\end{figure}\\
 The number of mergeable tokens, which corresponds to the size of the \textbf{src} set, is limited by the choice of \(sx\) and \(sy\).
 \begin{align*}
     r_{max} = 1-\frac{1}{sx*sy}
@@ -70,7 +76,7 @@ The \(r\) most similar tokens of \textbf{src} and \textbf{dst} can now be identi
 ToMe, in its basic form, only merges tokens in the self-attn block and defaults to using \(2 \times 2\) batches for token partitioning, with a randomly chosen \textbf{dst} token for every batch, resulting in a 75\% \textbf{src} and 25\% \textbf{dst} split. \\
 ToMe is also not applied in every network block, but only the ones with the most tokens. Bolya and Hoffman argued:
 "We try restricting ToMe to only blocks with some minimum number of tokens and find that only the blocks with the most tokens need ToMe applied to get most of the speed-up" \cite{bolya2023tomesd}.\\
-Lastly, \(r\) remains consistent throughout the whole image generation process, as Bolya and Hofmann found out that merging more tokens during earlier diffusion steps and fewer during later steps does not provide a significant improvement to performance.
+Lastly, \(r\) remains consistent throughout the whole image generation process, as Bolya and Hoffman found out that merging more tokens during earlier diffusion steps and fewer during later steps does not provide a significant improvement to performance.
 
 
 

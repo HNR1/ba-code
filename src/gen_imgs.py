@@ -42,7 +42,6 @@ def cut_prompt(prompt, max_len=300, delimiter=','):
 assert torch.cuda.is_available()
 pipeline = DiffusionPipeline.from_pretrained('pipelines/SD-v1-5').to('cuda')
 pipeline.enable_attention_slicing()
-# disable safety checker
 def dummy(images, **kwargs):
     return images, [False]
 pipeline.safety_checker = dummy

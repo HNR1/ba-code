@@ -141,14 +141,23 @@ We expanded the image sets for the first two configurations to 1000 images per m
 \caption{FID and relative time compared to r=0\% for 4)}
 \label{fig:exp_4}
 \end{figure}\\
-Speed is very close across the board, with the speedup offered by every version always differing by less than 1.2\%. Within these thin margins, \textbf{Setup 2} consistently beat \textbf{Setup 1} when \(r>30\%\) and \textbf{Setup 3} was the quickest of the three most of the time (see Tab.~\ref{table:exp_4}).
+Speed is very close across the board, with the speedup offered by every version always differing by less than 1.2\%. Within these thin margins, \textbf{Setup 2} consistently beat \textbf{Setup 1} when \(r>30\%\) and \textbf{Setup 3} was the quickest of the three most of the time (see Tab.~\ref{table:exp_4}).\\
 Our discoveries regarding image quality are reinforced, with \textbf{setup 3} noticeably outperforming \textbf{setup 2}, which in turn performs slightly better than \textbf{setup 1} (see Fig.~\ref{fig:exp_4}).\\
-
+\begin{table}[!htb]
+\centering
+\begin{tabular}{c c c}
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_0.png} & \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_20.png} &
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_50.png}\\
+    \(r=0\%\) & \(20\%\) & \(50\%\) \\
+\end{tabular}
+\caption{$768 \times 768$ images created with ToMe configuration according to our best setup from \(3.2\)}
+\end{table}
 
 
 %\newpage
 \subsubsection*{Summary}
-The experiments we conducted suggest that ToMe's performance can be improved by applying token merging in both the self-attn and cross-attn layer of the transformer. Furthermore, the best performance can be achieved by using $1 \times 2$ for token partitioning, bringing particularly great improvements to image quality when \(r\leq40\%\).\\
+Firstly, the experiments we conducted support ToMe's effectiveness regarding image generation speedup. Inference time was cut in half while image quality remained great, although in some cases details and textures started to deteriorate for larger values of \(r\).\\
+Our results suggest that ToMe's performance can be improved by applying token merging in both the self-attn and cross-attn layer of the transformer. Furthermore, the best performance can be achieved by using $1 \times 2$ for token partitioning, bringing particularly great improvements to image quality when \(r\leq40\%\).\\
 Another important discovery is that token merging in the self-attn module is essential to unlocking speed improvements for image generation. On the other hand, using ToMe in the mlp layer seems to exclusively come at a disadvantage for image quality.\\
 Moreover, it is advantageous to create sufficiently large images when using ToMe in order to reap greater the speed benefits. We showed that the time improvements with token merging noticeably decrease from >50\% for $768 \times 768$ images to only about 25\% for $512 \times 512$ images at \(r=60\%\) (see Tab.~\ref{table:exp_1_4},~\ref{table:exp_2}).\\
 Additionally, it was shown that strongly skewing the \textbf{src}-\textbf{dst}-ratio away from an equal distribution has negative effects on image quality as well (see Tab.~\ref{table:exp_3}).\\
