@@ -78,7 +78,7 @@ These results motivate the use of token merging in both the self-attn and cross-
 
 
 %\newpage
-\subsubsection*{2): Exploring smaller images sizes}
+\subsubsection*{2): Exploring smaller image sizes}
 In this section, we want to expand the scope of our trials to smaller image sizes. Precisely, we want to repeat looking at token merging in the self-attn layer (black) and both the self-attn and cross-attn layer (red), but this time with smaller $512 \times 512$ images. Again a set of 500 prompts is randomly sampled and a corresponding set of random seeds is generated.
 \begin{figure}[!htb]
     \input{plots/plot5_fid}
@@ -124,7 +124,7 @@ This limits our merge volume to 50\% but allows for better matches during the me
 \caption{FID and relative time compared to r=0\% for 3)}
 \label{fig:exp_3}
 \end{figure}\\
-Resizing the batches only has minor effects on image generation speed, as all three configurations consistently remain within one second of each other, although the setup with $3 \times 3$ batch does consistently perform the best in that regard (see Tab.~\ref{table:exp_3}).\\
+Resizing the batches only has minor effects on image generation speed, as all three configurations consistently remain within one second of each other, although the setup with $3 \times 3$ batches does consistently perform the best in that regard (see Tab.~\ref{table:exp_3}).\\
 Image quality shows a noticeable improvement with smaller batch sizes. FID values for the ToMe setup using $3 \times 3$ batches slightly exceed the ones of the setup with $2 \times 2$ batches when \(r>10\%\), which in turn clearly exceed the ones of the version with $1 \times 2$ batches. (see Fig.~\ref{fig:exp_3}).
 The gap closes towards \(r=50\%=r_{max}\), as every \textbf{src} token has to be merged when using $1 \times 2$ batches, regardless of how good of a match from \textbf{dst} is available.\\
 It can still be concluded that using the $1 \times 2$ batches to create an equal number of \textbf{src} and \textbf{dst} tokens yields the best performance (even at a minor speed discount), especially when \(r\) is not close to \(0\%\) or \(r_{max}\), while the usage of larger batches with a smaller \(\textbf{dst\%}\) is not advisable.
@@ -159,6 +159,6 @@ Our discoveries regarding image quality are reinforced, with \textbf{setup 3} no
 Firstly, the experiments we conducted support ToMe's effectiveness regarding image generation speedup. Inference time was cut in half while image quality remained great, although in some cases details and textures started to deteriorate for larger values of \(r\).\\
 Our results suggest that ToMe's performance can be improved by applying token merging in both the self-attn and cross-attn layer of the transformer. Furthermore, the best performance can be achieved by using $1 \times 2$ for token partitioning, bringing particularly great improvements to image quality when \(r\leq40\%\).\\
 Another important discovery is that token merging in the self-attn module is essential to unlocking speed improvements for image generation. On the other hand, using ToMe in the mlp layer seems to exclusively come at a disadvantage for image quality.\\
-Moreover, it is advantageous to create sufficiently large images when using ToMe in order to reap greater the speed benefits. We showed that the time improvements with token merging noticeably decrease from >50\% for $768 \times 768$ images to only about 25\% for $512 \times 512$ images at \(r=60\%\) (see Tab.~\ref{table:exp_1_4},~\ref{table:exp_2}).\\
+Moreover, it is advantageous to create sufficiently large images when using ToMe in order to reap greater speed benefits. We showed that the time improvements with token merging noticeably decrease from >50\% for $768 \times 768$ images to only about 25\% for $512 \times 512$ images at \(r=60\%\) (see Tab.~\ref{table:exp_1_4},~\ref{table:exp_2}).\\
 Additionally, it was shown that strongly skewing the \textbf{src}-\textbf{dst}-ratio away from an equal distribution has negative effects on image quality as well (see Tab.~\ref{table:exp_3}).\\
-Another thing that stands out is that the speed andvantage grows slower when \(r\) becomes larger. E.g., switching from \(r=10\%\) to \(r=20\%\) usually results in a speed increase of more than 10\%, while switching from \(r=50\%\) to \(r=60\%\) only gains you about 5\% most of the time.
+Another thing that stands out is that the speed advantage increases less when \(r\) becomes larger. E.g., switching from \(r=10\%\) to \(r=20\%\) usually results in a speed increase of more than 10\%, while switching from \(r=50\%\) to \(r=60\%\) only gains you about 5\% most of the time.

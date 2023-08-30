@@ -2,13 +2,13 @@
 %General Background:
 Image generation models, such as Stable Diffusion, are popular tools for creating any desired image from a line of text. 
 %Specific Background:
-The inclusion of new transformer-based technologies into these models has improved the quality of their images, though they operating time can be very slow.
+The inclusion of new transformer-based technologies into these models has improved the quality of their images, though their operating time can be very slow.
 %Knowledge Gap:
 \cite{bolya2023tomesd} have introduced Token Merging (ToMe) for Stable Diffusion to improve computational time by reducing the number of tokens evaluated by the model.
 %Here we show...:
-Our goal was to replicate their results and investigate whether performance can be improved with by using different configurations for ToMe.
+The goal of this thesis was to replicate their results and investigate whether performance can be improved by using different configurations for ToMe.
 %Results:
 Our results show that ToMe's default configuration maintains great image quality while accelerating image generation by up to more than $2 \times$, when reducing the number of tokens by up to \(60\%\). Beyond that, we identified different configurations for ToMe that improve the performance compared to the default setup, by using different partitioning methods and expanding the scope of token merging in the transformer. 
 %Implications:
-This work further solidifies the viability of token merging and hopefully incentivises further research into improving the efficiency of generative models.\\
+This work further solidifies the viability of token merging and incentivises further research into improving the efficiency of generative models.\\
 Code is available at \url{https://github.com/HNR1/ba-code}
