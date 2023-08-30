@@ -18,7 +18,7 @@ Multiple images were created per prompt, with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\
 
 \subsubsection*{Measuring results}
 For image quality, the FID between a subset with \(r > 0\%\) and the subset with \(r = 0\%\) of the same dataset is computed to examine how ToMe performs with different values for \(r\).\\
-The speed of image generation is assessed by recording the time taken to create each individual image and then calculating the average across all subsets.
+The speed of image generation is assessed by recording the time taken to create each individual image (in s/im) and then calculating the average across all subsets.
 \begin{lstlisting}[language=Python]
 start = time.time()
 image = pipeline(prompt, x, y, ...)
@@ -50,7 +50,7 @@ prompt = prompt[:idx]
 
 %\newpage
 \subsection{Comparison to Original Setup}
-Bolya and Hofmann also used the Stable Diffusion v1.5 model to generate their images. They created 2,000 $512 \times 512$ images (2 per ImageNet-1k class \cite{deng2009imagenet}) and then computed the FID values between their images and a class-balanced selection of 5,000 images from the ImageNet-1k dataset using pytorch-fid \cite{Seitzer2020FID}. Their images were generated with 50 diffusion steps and a cfg scale of 7.5, matching our setup. Speed measurements were taken by averaging the diffusion time over all 2,000 samples. All their images were created on a single 4090 GPU.\\
+\cite{bolya2023tomesd} also used the Stable Diffusion v1.5 model to generate their images. They created 2,000 $512 \times 512$ images (2 per ImageNet-1k class \cite{deng2009imagenet}) and then computed the FID values between their images and a class-balanced selection of 5,000 images from the ImageNet-1k dataset using pytorch-fid \cite{Seitzer2020FID}. Their images were generated with 50 diffusion steps and a cfg scale of 7.5, matching our setup. Speed measurements were taken by averaging the diffusion time over all 2,000 samples. All their images were created on a single 4090 GPU.\\
 \\
 %\newpage
 The most notable difference to our setup is that we compare a set of merged images with their own unmerged versions, while Bolya and Hoffman's approach compares image sets of the same categories but does not directly try to measure alterations of images created by ToMe. Their GPU hardware also differs from ours, resulting in overall faster diffusion times in their experiments. The larger number of images in their trials also reduces the impact of FID's bias and leads to their results consistently showing lower FID values.\\

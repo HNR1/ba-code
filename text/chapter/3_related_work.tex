@@ -4,7 +4,7 @@
 \subsection{Token Pruning}
 Several works have tried to utilize the transformer's flexibility when it comes to handling inconsistent amounts of tokens by pruning the tokens that are considered the least important \cite{meng2022adavit,yin2022vit}. 
 Differing from ToMe, these methods require model-specific training, and additionally, they dynamically determine the number of pruned tokens, resulting in variances between images. The fluctuations in token number improve accuracy, but make batching of different samples impossible and often require the use of masks for training. This eradicates or at least limits the speed-up that can be gained during training.\\
-ToMe does not suffer from these problems as the number of tokens always stays the same outside of transformer components and no training is required. Still, ToMe achieves speed-ups in both image generation and training of models.
+ToMe does not suffer from these problems as the number of tokens always stays the same outside of transformer components and no training is required. Still, ToMe achieves speed-ups in both image generation and training of models \cite{bolya2023tomesd}.
 
 
 

@@ -25,7 +25,7 @@ Two tokens \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1
     x_2' = x_{1,2}^*
 \end{align*}
 in order to recreate the pre-merge amount of tokens.\\
-This naive approach does lose information because the now unmerged tokens both have the average of their previous values, but this loss is small due their already high similarity before the merge.
+This naive approach does lose information, as the now unmerged tokens both have the average of their previous values. This loss is often small, due to token merging being based on their similarity.
 
 
 
@@ -54,7 +54,7 @@ In the subsequent steps, the two most similar tokens are chosen greedily and mer
 
 
 \subsection{Token Similarity}
-It is also relevant to define what "token similarity" exactly means because you can not determine their similarity by measuring the distance between their features, as the intermediate feature space of transformers is usually overparameterized.
+It is also relevant to define what "token similarity" exactly means. The similarity of tokens can not be determined by measuring the distance between their features, as the intermediate feature space of transformers is usually overparameterized.
 For that reason, a different similarity metric is necessary. \cite{bolya2023tome} tried to utilize that the keys of the transformers self-attention summarize the information of each token and therefore determined similarity by computing the cosine similarity between the keys of each token. ToMe for SD though, moves away from proportional attention and computes the cosine similarity between the \textbf{src} and \textbf{dst} set created from the inputs to the block \(x\), instead of the aforementioned keys. The similarities are only computed once at the beginning of each transformer block.
 
 
