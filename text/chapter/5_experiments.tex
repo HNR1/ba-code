@@ -55,7 +55,15 @@ Bolya and Hofmann also used the Stable Diffusion v1.5 model to generate their im
 %\newpage
 The most notable difference to our setup is that we compare a set of merged images with their own unmerged versions, while Bolya and Hoffman's approach compares image sets of the same categories but does not directly try to measure alterations of images created by ToMe. Their GPU hardware also differs from ours, resulting in overall faster diffusion times in their experiments. The larger number of images in their trials also reduces the impact of FID's bias and leads to their results consistently showing lower FID values.\\
 Additionally, Bolya and Hoffman also measured and analyzed the memory usage during the diffusion process, while we left memory consumption completely out of the scope of this work.
-
+\begin{table}[!htb]
+\centering
+\begin{tabular}{c c c}
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_0.png} & \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_20.png} &
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_50.png}\\
+    \(r=0\%\) & \(20\%\) & \(50\%\) \\
+\end{tabular}
+\caption{$768 \times 768$ images created with the default configuration ToMe}
+\end{table}
 
 
 %\newpage
@@ -66,7 +74,7 @@ Additionally, Bolya and Hoffman also measured and analyzed the memory usage duri
 
 %\newpage
 \subsection{Comparison to Original Results}
-The great differences in experimental setups and hardware make it impossible to compare specific numbers. The general promises of ToMe for SD by Bolya and Hofmann can be confirmed though, as our results show that ToMe makes image generation up to $2 \times$ faster while often maintaining great image quality at \(r = 60\%\). Though our more complex prompts and images were more susceptible to deterioration when large amounts of tokens were merged. The disregard of image complexity is a blind spot in Bolya and Hoffman's work.\\
+The great differences in experimental setups and hardware make it impossible to compare specific numbers. The general promises of ToMe for SD by Bolya and Hofmann can be confirmed though, as our results show that ToMe makes image generation up to $2 \times$ faster while often maintaining great image quality even at \(r = 60\%\). Though complex prompts and images were more susceptible to deterioration when large amounts of tokens were merged, which in some cases lead to images completely falling apart. Image complexity and detail found little to no consideration in Bolya and Hoffman's work.\\
 \\
 However, our findings suggest different configurations of ToMe yield better results.
 Firstly, we found out that expanding token merging from only the self-attn layer to the cross-attn layer improves both speed and quality. There was no data for this setup listed by Bolya and Hofmann, although they mentioned: "Note that FID does not consider prompt adherence, which is likely why merging the cross-attn module actually reduces FID" \cite{bolya2023tomesd}. \\

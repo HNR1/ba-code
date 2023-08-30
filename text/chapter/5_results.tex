@@ -1,4 +1,4 @@
-The experiments can be split up into three different parts inspecting how ToMe affects performance\\ \(1)\) when applied to different parts of the transformer,\\ \(2)\) when applied to smaller images, and\\ \(3)\) when different settings for partitioning the \textbf{src} and \textbf{dst} sets are used.\\
+The experiments can be split up into three different parts inspecting how ToMe affects performance\\ \(1)\) when applied to different parts of the transformer,\\ \(2)\) when applied to smaller images, and\\ \(3)\) when different settings for partitioning the \textbf{src} and \textbf{dst} sets are used.
 \\
 The results of every experimental unit are presented in two figures. The first figure focuses on image quality, displaying FID values, while the subsequent one emphasizes image generation speed by showcasing how the average time required for image generation of each subset compares to the \(r=0\%\) subset.
 Both figures have \(r\%\) on the x-axis showing how the metrics change with an increasing amount of tokens merged.\\
@@ -60,7 +60,6 @@ We conclusively derive that ToMe without involvement of the self-attn layer does
 
 
 
-
 %\newpage
 \subsubsection*{1.4): [default] vs [self-attn \& cross-attn] (the second time)}
 The most prominent takeaway of the first three experiments is that token merging in both the self-attn and cross-attn layers improves the performance of ToMe both in terms of image quality and image generation speed.\\
@@ -74,6 +73,15 @@ We want to further examine this discovery by repeating the experiment with a new
 %\newpage
 It is again visible that the use of ToMe in both the self-attn and cross-attn layer, firstly, improves image quality in any case and improves inference speed when \(r > 30\%\) compared to the ToMe default (see Fig.~\ref{fig:exp_1_4}). Image generation speed seems unaffected by ToMe when \(r \leq 30\%\) (see Tab.~\ref{table:exp_1_4}).
 These results motivate the use of token merging in both the self-attn and cross-attn modules as the new default for $768 \times 768$ images going forward.
+\begin{table}[!htb]
+\centering
+\begin{tabular}{c c c}
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/comp_cross/warrior_0.png} & \includegraphics[width=0.3\linewidth]{static/sample_imgs/comp_cross/warrior_nc_50.png} &
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/comp_cross/warrior_c_50.png}\\
+    \(r=0\%\) & \(50\%\) & \(50\%\) \\
+\end{tabular}
+\caption{$768 \times 768$ images created with ToMe default (middle) and ToMe expanded to cross-attn (right)}
+\end{table}
 
 
 
@@ -128,6 +136,15 @@ Resizing the batches only has minor effects on image generation speed, as all th
 Image quality shows a noticeable improvement with smaller batch sizes. FID values for the ToMe setup using $3 \times 3$ batches slightly exceed the ones of the setup with $2 \times 2$ batches when \(r>10\%\), which in turn clearly exceed the ones of the version with $1 \times 2$ batches. (see Fig.~\ref{fig:exp_3}).
 The gap closes towards \(r=50\%=r_{max}\), as every \textbf{src} token has to be merged when using $1 \times 2$ batches, regardless of how good of a match from \textbf{dst} is available.\\
 It can still be concluded that using the $1 \times 2$ batches to create an equal number of \textbf{src} and \textbf{dst} tokens yields the best performance (even at a minor speed discount), especially when \(r\) is not close to \(0\%\) or \(r_{max}\), while the usage of larger batches with a smaller \(\textbf{dst\%}\) is not advisable.
+\begin{table}[!htb]
+\centering
+\begin{tabular}{c c c}
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/comp_part/beardman_0.png} & \includegraphics[width=0.3\linewidth]{static/sample_imgs/comp_part/beardman_3x3_50.png} &
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/comp_part/beardman_1x2_50.png}\\
+    \(r=0\%\) & \(50\%\) & \(50\%\) \\
+\end{tabular}
+\caption{$768 \times 768$ images created using $3 \times 3$ batches (middle) and $1 \times 2$ batches (right)}
+\end{table}
 
 
 
@@ -142,16 +159,8 @@ We expanded the image sets for the first two configurations to 1000 images per m
 \label{fig:exp_4}
 \end{figure}\\
 Speed is very close across the board, with the speedup offered by every version always differing by less than 1.2\%. Within these thin margins, \textbf{Setup 2} consistently beat \textbf{Setup 1} when \(r>30\%\) and \textbf{Setup 3} was the quickest of the three most of the time (see Tab.~\ref{table:exp_4}).\\
-Our discoveries regarding image quality are reinforced, with \textbf{setup 3} noticeably outperforming \textbf{setup 2}, which in turn performs slightly better than \textbf{setup 1} (see Fig.~\ref{fig:exp_4}).\\
-\begin{table}[!htb]
-\centering
-\begin{tabular}{c c c}
-    \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_0.png} & \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_20.png} &
-    \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_50.png}\\
-    \(r=0\%\) & \(20\%\) & \(50\%\) \\
-\end{tabular}
-\caption{$768 \times 768$ images created with ToMe configuration according to our best setup from \(3.2\)}
-\end{table}
+Our discoveries regarding image quality are reinforced, with \textbf{setup 3} noticeably outperforming \textbf{setup 2}, which in turn performs slightly better than \textbf{setup 1} (see Fig.~\ref{fig:exp_4}).
+
 
 
 %\newpage
@@ -162,3 +171,12 @@ Another important discovery is that token merging in the self-attn module is ess
 Moreover, it is advantageous to create sufficiently large images when using ToMe in order to reap greater speed benefits. We showed that the time improvements with token merging noticeably decrease from >50\% for $768 \times 768$ images to only about 25\% for $512 \times 512$ images at \(r=60\%\) (see Tab.~\ref{table:exp_1_4},~\ref{table:exp_2}).\\
 Additionally, it was shown that strongly skewing the \textbf{src}-\textbf{dst}-ratio away from an equal distribution has negative effects on image quality as well (see Tab.~\ref{table:exp_3}).\\
 Another thing that stands out is that the speed advantage increases less when \(r\) becomes larger. E.g., switching from \(r=10\%\) to \(r=20\%\) usually results in a speed increase of more than 10\%, while switching from \(r=50\%\) to \(r=60\%\) only gains you about 5\% most of the time.
+\begin{table}[!htb]
+\centering
+\begin{tabular}{c c c}
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_0.png} & \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_20.png} &
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/main_1x2/color_head_50.png}\\
+    \(r=0\%\) & \(20\%\) & \(50\%\) \\
+\end{tabular}
+\caption{$768 \times 768$ images created with ToMe configuration according to our best setup from \(3.2\)}
+\end{table}

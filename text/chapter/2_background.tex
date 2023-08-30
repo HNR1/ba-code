@@ -3,7 +3,8 @@
 
 
 \subsection{Stable Diffusion}
-Stable Diffusion is based on a special type of Diffusion Model called Latent Diffusion Model (LDM) \cite{Rombach_2022_CVPR}. LDMs are trained to create a desired image by repeatedly denoising an image initialised with random gaussian noise. What separates LDMs from regular Diffusion Models is that they apply the diffusion process in a lower-dimensional latent space instead of the pixel-space. This greatly alleviates the need for extensive resources, especially when generating larger images. LDMs have three main components: 1) the autoencoder, 2) the U-Net and 3) the text-encoder.
+Stable Diffusion is based on a special type of Diffusion Model called Latent Diffusion Model (LDM) \cite{Rombach_2022_CVPR}. LDMs are trained to create a desired image by repeatedly denoising an image initialised with random gaussian noise; this process is called reverse diffusion. Forward diffusion, which applies more and more noise at each step, is used during training, so the model learns to identify noise in an image.\\
+What separates LDMs from regular Diffusion Models is that they apply the diffusion process in a lower-dimensional latent space instead of the pixel-space. This greatly alleviates the need for extensive resources, especially when generating larger images. LDMs have three main components: \(1)\) the autoencoder, \(2)\) the U-Net and \(3)\) the text-encoder.
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]
@@ -15,7 +16,7 @@ Stable Diffusion is based on a special type of Diffusion Model called Latent Dif
 
 
 \subsubsection{The Autoencoder}
-A Variational Autoencoder (VAE) consists of two parts: the encoder and the decoder. "During latent diffusion training, the encoder is used to get the latent representations (latents) of the images for the forward diffusion process, which applies more and more noise at each step" \cite{patil2022stable}. The decoder conversely transforms the denoised latents, created by the U-Net, back into the pixel space at the end of the diffusion process. Only the decoder is used for the image generation process (see Fig.~\ref{fig:ldm}).
+A Variational Autoencoder (VAE) consists of two parts: the encoder and the decoder. "During latent diffusion training, the encoder is used to get the latent representations (latents) of the images for the forward diffusion process" \cite{patil2022stable}. The decoder conversely transforms the denoised latents, created by the U-Net, back into the pixel space at the end of the diffusion process. Only the decoder is used for the image generation process (see Fig.~\ref{fig:ldm}).
 
 
 
