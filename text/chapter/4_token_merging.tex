@@ -54,8 +54,7 @@ In the subsequent steps, the two most similar tokens are chosen greedily and mer
 
 
 \subsection{Token Similarity}
-It is also relevant to define what "token similarity" exactly means. The similarity of tokens can not be determined by measuring the distance between their features, as the intermediate feature space of transformers is usually overparameterized.
-For that reason, a different similarity metric is necessary. \cite{bolya2023tome} tried to utilize that the keys of the transformers self-attention summarize the information of each token and therefore determined similarity by computing the cosine similarity between the keys of each token. ToMe for SD though, moves away from proportional attention and computes the cosine similarity between the \textbf{src} and \textbf{dst} set created from the inputs to the block \(x\), instead of the aforementioned keys. The similarities are only computed once at the beginning of each transformer block.
+It is also important to define what "token similarity" means in this context. Unlike the first iteration of ToMe which used key-based similarity \cite{bolya2023tome}, ToMe for SD simply partitions the inputs of block \(x\) into to \textbf{src} and \textbf{dst} and then computes the cosine similarity between the two sets. The similarities are only computed once at the beginning of each transformer block \cite{bolya2023tomesd}.
 
 
 
@@ -83,3 +82,13 @@ Lastly, \(r\) remains consistent throughout the whole image generation process, 
 \subsubsection*{Image inconsistencies}
 The usage of ToMe curiously prevents exact reproduction of the subsequent experiments, as minor randomness is involved in the image generation, even when \textbf{use\_rand\\=False} is set. We were not able to determine why this randomness occurs. The
 variances are detectable by FID, but invisible to the human eye.
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{c c c}
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_0.png} & \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_20.png} &
+    \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_50.png}\\
+    \(r=0\%\) & \(20\%\) & \(50\%\) \\
+\end{tabular}
+\caption{$768 \times 768$ images created with the default configuration of ToMe}
+\end{table}

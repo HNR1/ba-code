@@ -9,9 +9,9 @@ The performance is defined by\\
 \subsection{Setup}
 \subsubsection*{Creating image datasets}
 The experiments always compare how diffusion time and image quality change across a spectrum of different volumes of tokens \((r)\) removed.
-The images were generated with a "DiffusionPipeline" from HuggingFace's diffusers library \cite{von-platen-etal-2022-diffusers}, using the Stable Diffusion v1.5 model.\\
-We sampled multiple sets of 500 prompts from the dataset \href{https://huggingface.co/datasets/Gustavosta/Stable-Diffusion-Prompts}{"Stable-Diffusion-Prompts"} on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: \href{https://lexica.art}{Lexica.art}, and generated a corresponding set of random seeds.
-Prompts appearing multiple times within a set was not specifically prevented, due to the extremely low probability of a specific prompt-seed-pair appearing multiple times within a dataset. Same prompts with different seeds result in different images and therefore do not corrupt the validity of a dataset by our assessment.\\
+The images were generated with a \href{https://huggingface.co/docs/diffusers/v0.18.2/en/api/diffusion_pipeline}{DiffusionPipeline} from HuggingFace's diffusers library \cite{von-platen-etal-2022-diffusers}, using the Stable Diffusion v1.5 model.\\
+We sampled multiple sets of 500 prompts from the dataset \href{https://huggingface.co/datasets/Gustavosta/Stable-Diffusion-Prompts}{"Stable-Diffusion-Prompts"} on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: \href{https://lexica.art}{Lexica.art}, and generated a corresponding set of random seeds. This prompt set was chosen to closely simulate "real world" usage of SD.\\
+Prompts appearing multiple times within a dataset was not specifically prevented, due to the extremely low probability of a specific prompt-seed-pair appearing multiple times within a sample. Same prompts with different seeds result in different images and therefore do not corrupt the validity of a dataset by our assessment.\\
 Multiple images were created per prompt, with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\%, and 60\% (if possible) merge applied respectively, creating a set of 3,500 (or sometimes 3,000) images which can be split up into subsets of 500 images each for every merge volume.
 
 
@@ -55,15 +55,7 @@ prompt = prompt[:idx]
 %\newpage
 The most notable difference to our setup is that we compare a set of merged images with their own unmerged versions, while Bolya and Hoffman's approach compares image sets of the same categories but does not directly try to measure alterations of images created by ToMe. Their GPU hardware also differs from ours, resulting in overall faster diffusion times in their experiments. The larger number of images in their trials also reduces the impact of FID's bias and leads to their results consistently showing lower FID values.\\
 Additionally, Bolya and Hoffman also measured and analyzed the memory usage during the diffusion process, while we left memory consumption completely out of the scope of this work.
-\begin{table}[!htb]
-\centering
-\begin{tabular}{c c c}
-    \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_0.png} & \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_20.png} &
-    \includegraphics[width=0.3\linewidth]{static/sample_imgs/secondary/wizard_50.png}\\
-    \(r=0\%\) & \(20\%\) & \(50\%\) \\
-\end{tabular}
-\caption{$768 \times 768$ images created with the default configuration ToMe}
-\end{table}
+
 
 
 %\newpage
