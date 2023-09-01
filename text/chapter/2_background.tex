@@ -27,7 +27,7 @@ This noise residual is partially \((sigma)\) removed in every step, until we end
 latens = latents - sigma * noise_pred
 \end{lstlisting}
 The U-Net consists of an encoder and a decoder with transformer-based blocks. "Thus, it first encodes the current noised image as a set of tokens, then passes it through a series of transformer blocks" \cite{bolya2023tomesd}. The inclusion of transformer-based blocks allows the model to not only preserve the spacial hierarchies but also the semantic structure of the image.\\
-A further aspect that distinguishes the U-Net from an autoencoder are the skip connections that directly pass information from the encoder to the decoder, aiding in the preservation of details during upsampling (see Fig.~\ref{fig:ldm}).
+A further aspect that distinguishes the U-Net from an autoencoder are the skip connections that directly pass information from the encoder to the decoder, aiding the preservation of details during upsampling (see Fig.~\ref{fig:ldm}).
 
 
 
