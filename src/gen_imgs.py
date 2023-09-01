@@ -56,7 +56,7 @@ for r, dir in zip(merge_volumes, directories):
     tomesd.apply_patch(pipeline, r, sx=2, sy=2, merge_attn=True, merge_crossattn=False, merge_mlp=False)
     for i in range(sample_size):
         prompt, seed = cut_prompt(prompts[i]), seeds[i].item()
-        # create image
+        # create image and measure time
         start = time.time()
         image = pipeline(prompt, x, y, generator=torch.Generator().manual_seed(seed), ).images[0]
         end = time.time()

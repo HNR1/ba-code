@@ -1,6 +1,7 @@
 import sys       
 sys.path.insert(1, '/gpfs/project/hebal100/ba-code')
 import pandas as pd
+# pytorch_fid was manually cloned into the project
 from libs.pytorch_fid.src.fid.fid_score import calculate_fid_given_paths
 
 HPC_PATH = "/gpfs/scratch/hebal100"
