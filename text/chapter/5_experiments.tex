@@ -1,23 +1,23 @@
 \section{Experimental Procedures} \label{experiments}
 We perform several experiments involving the creation of image datasets using the model \href{https://huggingface.co/runwayml/stable-diffusion-v1-5}{Stable Diffusion v1.5} by runwayml \cite{Rombach_2022_CVPR} and applying ToMe in different ways, then assessing the performance.
 The performance is defined by\\ 
-\(1)\) speed: the average diffusion time for every image of the set and\\
+\(1)\) speed: the average generation time for every image of a set and\\
 \(2)\) image quality: the FID-value between sets of images that had token merging applied and their counterparts (that is same prompt, seed and image size) that didn't use any token merging.
 
 
 
 \subsection{Setup}
 \subsubsection*{Creating image datasets}
-The experiments always compare how diffusion time and image quality change across a spectrum of different volumes of tokens \((r)\) removed.
+The experiments always compare how image generation time and image quality change across a spectrum of different volumes of tokens \((r)\) removed.
 The images were generated with a \href{https://huggingface.co/docs/diffusers/v0.18.2/en/api/diffusion_pipeline}{DiffusionPipeline} from HuggingFace's diffusers library \cite{von-platen-etal-2022-diffusers}, using the Stable Diffusion v1.5 model.\\
-We sampled multiple sets of 500 prompts from the dataset \href{https://huggingface.co/datasets/Gustavosta/Stable-Diffusion-Prompts}{"Stable-Diffusion-Prompts"} on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: \href{https://lexica.art}{Lexica.art}, and generated a corresponding set of random seeds. This prompt set was chosen to closely simulate "real world" usage of SD.\\
+We sampled multiple sets of 500 prompts from the library \href{https://huggingface.co/datasets/Gustavosta/Stable-Diffusion-Prompts}{"Stable-Diffusion-Prompts"} on HuggingFace which has 80,000 prompts filtered and extracted from the image finder for Stable Diffusion: \href{https://lexica.art}{Lexica.art}, and generated a corresponding set of random seeds. This prompt library was chosen to closely simulate "real world" usage of SD.\\
 Prompts appearing multiple times within a dataset was not specifically prevented, due to the extremely low probability of a specific prompt-seed-pair appearing multiple times within a sample. Same prompts with different seeds result in different images and therefore do not corrupt the validity of a dataset by our assessment.\\
 Multiple images were created per prompt, with a 0\%, 10\%, 20\%, 30\%, 40\%, 50\%, and 60\% (if possible) merge applied respectively, creating a set of 3,500 (or sometimes 3,000) images which can be split up into subsets of 500 images each for every merge volume.
 
 
 
 \subsubsection*{Measuring results}
-For image quality, the FID between a subset with \(r > 0\%\) and the subset with \(r = 0\%\) of the same dataset is computed to examine how ToMe performs with different values for \(r\).\\
+For image quality, the FID between a subset with \(r > 0\%\) and the subset with \(r = 0\%\) of the same dataset is computed to examine how ToMe performs across different values for \(r\).\\
 The speed of image generation is assessed by recording the time taken to create each individual image (in s/im) and then calculating the average across all subsets.
 \begin{lstlisting}[language=Python]
 start = time.time()
@@ -41,7 +41,7 @@ We use our \href{https://github.com/HNR1/pytorch_fid}{own fork} of pytorch-fid \
 
 
 \subsubsection*{Prompts}
-We shortened every prompt that exceeds 300 characters, in order to ensure that CLIP's token limit is not breached, as CLIP can only handle up to 77 tokens.
+We shortened every prompt that exceeds 300 characters, in order to ensure that CLIP's token limit is not breached, as the CLIPTokenizer can only handle up to 77 tokens.
 This is accomplished by determining the index (\(idx\)) of the last comma in the first 300 characters of every oversized prompt and then cutting off everything from this point onwards.
 \begin{lstlisting}[language=Python]
 prompt = prompt[:idx]
@@ -54,7 +54,7 @@ prompt = prompt[:idx]
 \\
 %\newpage
 The most notable difference to our setup is that we compare a set of merged images with their own unmerged versions, while Bolya and Hoffman's approach compares image sets of the same categories but does not directly try to measure alterations of images created by ToMe. Their GPU hardware also differs from ours, resulting in overall faster diffusion times in their experiments. The larger number of images in their trials also reduces the impact of FID's bias and leads to their results consistently showing lower FID values.\\
-Additionally, Bolya and Hoffman also measured and analyzed the memory usage during the diffusion process, while we left memory consumption completely out of the scope of this work.
+Additionally, Bolya and Hoffman measured and analyzed the memory usage during image generation, while we left memory consumption completely out of the scope of this work.
 
 
 
@@ -66,11 +66,11 @@ Additionally, Bolya and Hoffman also measured and analyzed the memory usage duri
 
 %\newpage
 \subsection{Comparison to Original Results}
-The great differences in experimental setups and hardware make it impossible to compare specific numbers. The general promises of ToMe for SD by Bolya and Hofmann can be confirmed though, as our results show that ToMe makes image generation up to $2 \times$ faster while often maintaining great image quality even at \(r = 60\%\). Though complex prompts and images were more susceptible to deterioration when large amounts of tokens were merged, which in some cases lead to images completely falling apart. Image complexity and detail found little to no consideration in Bolya and Hoffman's work.\\
+The great differences in experimental setups and hardware make it impossible to compare specific numbers. The general promises of ToMe for SD by Bolya and Hofmann can be confirmed though, as our results show that ToMe makes image generation up to $2.2 \times$ faster while often maintaining great image quality even at \(r = 60\%\). Though complex prompts and images were more susceptible to deterioration when large amounts of tokens were merged, which in some cases even lead to images completely falling apart. Image complexity and detail found little to no consideration in Bolya and Hoffman's work.\\
 \\
-However, our findings suggest different configurations of ToMe yield better results.
-Firstly, we found out that expanding token merging from only the self-attn layer to the cross-attn layer improves both speed and quality. There was no data for this setup listed by Bolya and Hofmann, although they mentioned: "Note that FID does not consider prompt adherence, which is likely why merging the cross-attn module actually reduces FID" \cite{bolya2023tomesd}. \\
+Our findings suggest different configurations of ToMe yield better results than the original default.
+Firstly, we found that expanding token merging from only the self-attn layer to the cross-attn layer improves both speed and quality. There was no data for this setup listed by Bolya and Hofmann, although they mentioned: "Note that FID does not consider prompt adherence, which is likely why merging the cross-attn module actually reduces FID" \cite{bolya2023tomesd}. \\
 The implicit assertion that extending token merging to the cross-attn module lowers image quality outside of the scope of FID seems less plausible, as our setup indirectly considers prompt adherence by measuring the similarity between identical images (same size, prompt and seed), instead of larger sets of images that are merely class-balanced.\\
-Though our results do confirm Bolya and Hofmann's observation that token merging in the mlp layer is clearly detrimental to image quality and thus not recommended.\\
+Our results do confirm Bolya and Hoffman's observation that token merging in the mlp layer is clearly detrimental to image quality and thus not recommended.\\
 \\
-Furthermore, our findings regarding token partitioning clearly contradict Bolya and Hofmann's. Their partition experiments found notably stronger deteriorations to image quality for $1 \times 2$ strides than for $2 \times 2$ strides, with FID being almost 10\% larger at \(r=50\%\) for the former \cite[Tab.~2 (a)]{bolya2023tomesd}. For us on the other hand, FID was about 2\% smaller at \(r=50\%\) and almost 10\% smaller at \(r=30\%\) for the $1 \times 2$ batches (see Tab.~\ref{table:exp_4}). 
+Furthermore, our findings regarding token partitioning clearly contradict Bolya and Hoffman's. Their partition experiments found notably stronger deteriorations to image quality for $1 \times 2$ strides than for $2 \times 2$ strides, with FID being almost 10\% larger at \(r=50\%\) for the former \cite[Tab.~2 (a)]{bolya2023tomesd}. For us on the other hand, FID was about 2\% smaller at \(r=50\%\) and almost 10\% smaller at \(r=30\%\) for $1 \times 2$ batches (see Tab.~\ref{table:exp_4}). 

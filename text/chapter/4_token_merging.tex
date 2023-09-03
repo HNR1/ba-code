@@ -1,7 +1,7 @@
 \section{Token Merging} \label{token_merging}
-In Token Merging for Stable Diffusion (ToMe) by \cite{bolya2023tomesd}, the number of tokens in a transformer is reduced by \(r\%\) through merging similar tokens before every diffusion step and unmerging them afterward to retain the original size of the image.\\
+In Token Merging for Stable Diffusion by \cite{bolya2023tomesd}, the number of tokens within a transformer component is reduced by \(r\%\) through the merging of similar tokens prior to processing. This is crucially followed by unmerging the tokens to restore the original image size.\\
 The tokens are partitioned into a source (\textbf{src}) and a destination (\textbf{dst}) set, then the most similar tokens from the \textbf{src} set are continuously merged into their \textbf{dst} counterparts until the number of tokens has reduced by \(r\)\%.\\
-The choice of \(r\) is a trade-off between image fidelity and diffusion time as a lower amount of tokens requires a smaller computation time but more information about the image is lost in the merge process.\\
+The choice of \(r\) is a trade-off between image fidelity and image generation time as a lower amount of tokens requires a smaller computing time but more information about the image is lost in the merge process.\\
 The merge can be applied in different components of the transformer (i.e., self-attn, cross-attn, mlp) (see Fig.~\ref{fig:tome}).
 \begin{figure}[!htb]
 \centering
@@ -14,7 +14,7 @@ The merge can be applied in different components of the transformer (i.e., self-
 
 
 \subsection{Merge and Unmerge Algorithms}
-\subsubsection*{Merging.} The Merge algorithm uses Bipartite-Soft-Matching to determine the similarity of tokens between the \textbf{src} and \textbf{dst} set. The two most similar tokens are taken and merged into a new token until the overall number of tokens has reduced by \(r\%\).\\
+\subsubsection*{Merging.} The Merge algorithm uses Bipartite-Soft-Matching to determine the similarity of tokens between the \textbf{src} and \textbf{dst} set. The two most similar tokens are repeatedly merged into a new token until the overall number of tokens has reduced by \(r\%\).
 Two tokens \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1,2}^* \in \mathbb{R}^c \), by averaging their features: \[x_{1,2}^* = \frac{x_1 + x_2}{2}\]
 
 
@@ -24,13 +24,13 @@ Two tokens \(x_1, x_2 \in \mathbb{R}^c\) would be merged into a new token \(x_{1
     x_1' = x_{1,2}^* \quad\quad
     x_2' = x_{1,2}^*
 \end{align*}
-in order to recreate the pre-merge amount of tokens.\\
-This naive approach does lose information, as the now unmerged tokens both have the average of their previous values. This loss is often small, due to token merging being based on their similarity.
+in order to recreate the pre-merge amount of tokens.
+This naive approach does lose information, as the now unmerged tokens both have the average of their previous values. This loss though is often small (especially for smaller values of \(r\)), as token selection is based on similarity.
 
 
 
 \subsection{Bipartite-Soft-Matching}
-Bipartite-Soft-Matching involves two main steps. First, the tensor of tokens is split into two tensors, one consisting of the \textbf{src} tokens and the other of \textbf{dst} tokens. Then, each token in the \textbf{src} set is matched with its most similar token in the \textbf{dst} set, creating a bipartite graph, with the edges between every \textbf{src} token and their closest match in the \textbf{dst} set. 
+Bipartite-Soft-Matching involves two main steps. First, the tokens are split into two sets, holding the \textbf{src} and \textbf{dst} tokens respectively. Then, every token in the \textbf{src} set is matched with its most similar token in the \textbf{dst} set, creating a bipartite graph with edges between every \textbf{src} token and their closest match in the \textbf{dst} set. 
 
 
 
@@ -72,16 +72,15 @@ The \(r\) most similar tokens of \textbf{src} and \textbf{dst} can now be identi
 
 
 \subsection{Additional Technical Information}
-ToMe, in its basic form, only merges tokens in the self-attn block and defaults to using \(2 \times 2\) batches for token partitioning, with a randomly chosen \textbf{dst} token for every batch, resulting in a 75\% \textbf{src} and 25\% \textbf{dst} split. \\
-ToMe is also not applied in every network block, but only the ones with the most tokens. Bolya and Hoffman argued:
+ToMe, in its basic form, only merges tokens in the self-attn layer and defaults to using \(2 \times 2\) batches for token partitioning, with a randomly chosen \textbf{dst} token for every batch, resulting in a 75\% \textbf{src} and 25\% \textbf{dst} split. \\
+ToMe is also not applied in every U-Net block, but only the ones with the most tokens. Bolya and Hoffman argued:
 "We try restricting ToMe to only blocks with some minimum number of tokens and find that only the blocks with the most tokens need ToMe applied to get most of the speed-up" \cite{bolya2023tomesd}.\\
-Lastly, \(r\) remains consistent throughout the whole image generation process, as Bolya and Hoffman found out that merging more tokens during earlier diffusion steps and fewer during later steps does not provide a significant improvement to performance.
+Lastly, \(r\) remains consistent throughout the whole image generation process, as Bolya and Hoffman found that merging more tokens during earlier diffusion steps and fewer during later steps does not provide a significant improvement to performance.
 
 
 
 \subsubsection*{Image inconsistencies}
-The usage of ToMe curiously prevents exact reproduction of the subsequent experiments, as minor randomness is involved in the image generation, even when \textbf{use\_rand\\=False} is set. We were not able to determine why this randomness occurs. The
-variances are detectable by FID, but invisible to the human eye.
+The usage of ToMe curiously prevents exact reproduction of the subsequent experiments, as minor randomness is involved in the image generation, even when \textbf{use\_rand\\=False} is set. We were not able to determine why this randomness occurs. The variances are detectable by FID, but invisible to the human eye.
 
 \begin{table}[!htb]
 \centering

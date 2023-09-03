@@ -1,8 +1,8 @@
 The experiments can be split up into three different parts inspecting how ToMe affects performance\\ \(1)\) when applied to different parts of the transformer,\\ \(2)\) when applied to smaller images, and\\ \(3)\) when different settings for partitioning the \textbf{src} and \textbf{dst} sets are used.
 \\
-The results of every experimental unit are presented in two figures. The first figure focuses on image quality, displaying FID values, while the subsequent one emphasizes image generation speed by showcasing how the average time required for image generation of each subset compares to the \(r=0\%\) subset.
-Both figures have \(r\%\) on the x-axis showing how the metrics change with an increasing amount of tokens merged.\\
-Datasets that are compared in an experimental unit, were always created with the same set of prompts and seeds, to ensure the comparability of the results.
+The results of every experimental unit are presented in two figures. The first figure focuses on image quality, displaying FID values, while the subsequent one emphasizes image generation speed, by showcasing how the average image generation time of each subset compares to the \(r=0\%\) subset.
+Both figures have \(r\%\) on the x-axis showing how the metrics change with an increasing amount of tokens merged.
+Datasets that are compared in an experimental unit, were always created with the same set of prompts and seeds, to ensure comparability of the results.
 
 
 
@@ -13,7 +13,7 @@ Our first set of experiments aims to gauge how the performance metrics are affec
 
 
 \subsubsection*{1.1): default (only self-attn) vs all (self-attn, cross-attn and mlp)}
-The first experiment of part 1 compares the default setting of ToMe where token merging is only applied in the self-attn layer (black) with a different configuration that has token merging applied in the self-attn, cross-attn and mlp layer (red). 
+The first experiment of part 1 compares the default setting of ToMe where token merging is only applied in the self-attn layer (black), with a different configuration that has token merging applied in the self-attn, cross-attn and mlp layer (red). 
 \begin{figure}[!htb]
 \label{fig:exp_1_1}
    \input{plots/plot1_fid}
@@ -23,7 +23,7 @@ The first experiment of part 1 compares the default setting of ToMe where token 
 \end{figure}\\
 %\newpage
 Firstly, the default setup of ToMe does make inference up to \(2 \times\) faster for \(r = 50\%\) (see Tab.~\ref{table:exp_1_1}), matching Bolya and Hoffman's description.\\
-The naive approach to improve performance by using token merging in every transformer layer, seemingly does not yield significant improvements as image generation speed noticeably increases when \(r > 30\%\), albeit at a clear cost of image quality with FID being consistently larger for this configuration (see Fig.~\ref{fig:exp_1_1}). \\
+The naive approach of improving performance by using token merging in every transformer layer, does not yield significant improvements. Image generation speed noticeably increases when \(r > 30\%\), albeit at a clear cost of image quality with FID being consistently larger for this configuration (see Fig.~\ref{fig:exp_1_1}). \\
 ToMe, in its default setup, consistently produces images closer to their no-ToMe original, so extending token merging to both the cross-attn and mlp layer does not appear beneficial. This approach can therefore be disregarded.
 
 
@@ -39,7 +39,7 @@ After \(1.1\), the question remains whether performance drops were caused by usi
 \end{figure}\\
 %\newpage
 This time it's clearly visible that merging tokens within the self-attn and cross-attn module performs the best, as it slightly improves the ToMe default both in terms of image quality and image generation speed when \(r > 30\%\) (see Fig.~\ref{fig:exp_1_2}).\\
-Token merging in the self-attn and mlp module on the other hand might offer the biggest speedup for image generation, but clearly performs the worst in terms of image quality across the board (see Tab.~\ref{table:exp_1_2}).\\
+Token merging in the self-attn and mlp module on the other hand might offer a larger speedup for image generation, but clearly performs the worst in terms of image quality across the board (see Tab.~\ref{table:exp_1_2}).\\
 We can therefore conclude that extending token merging to the cross-attn module might have positive effects on the performance, while extending it to the mlp module clearly worsens image quality.
 
 
@@ -55,14 +55,14 @@ The results of the default ToMe settings (black) again carry over from the previ
 \label{fig:exp_1_3}
 \end{figure}\\
 The most striking result here is that no token merging in the self-attn layer corresponds to no image generation speedup at all, rather slowing the process down (see Tab.~\ref{table:exp_1_3}). 
-The apparent improvements to image quality compared to the ToMe default consequently become negligible without any speed benefits, though it can be noted that token merging in only the cross-attn layer greatly outperforms token merging in both cross-attn and mlp layer in terms of image quality (see Fig.~\ref{fig:exp_1_3}).\\
+The apparent improvements to image quality compared to the ToMe default consequently become negligible without any speed benefits, though it can be noted that token merging in only the cross-attn layer greatly outperforms token merging in both the cross-attn and mlp layer in terms of image quality (see Fig.~\ref{fig:exp_1_3}).\\
 We conclusively derive that ToMe without involvement of the self-attn layer does not accelerate the image generation process at all and can be considered redundant and therefore be disregarded. It can additionally be derived from \(1.1 - 1.3\) that token merging in the mlp layer has strong negative effects on image quality and, thus, can not be recommended.
 
 
 
 %\newpage
 \subsubsection*{1.4): [default] vs [self-attn \& cross-attn] (the second time)}
-The most prominent takeaway of the first three experiments is that token merging in both the self-attn and cross-attn layers improves the performance of ToMe both in terms of image quality and image generation speed.\\
+The most prominent takeaway of the first three experiments is that token merging in both the self-attn and cross-attn layers improves the performance of SD both in terms of image quality and image generation speed.\\
 We want to further examine this discovery by repeating the experiment with a new set of 500 different prompt-seed pairs and then average the results of both trials.
 \begin{figure}[!htb]
     \input{plots/plot4_fid}
@@ -71,8 +71,8 @@ We want to further examine this discovery by repeating the experiment with a new
 \label{fig:exp_1_4}
 \end{figure}\\
 %\newpage
-It is again visible that the use of ToMe in both the self-attn and cross-attn layer, firstly, improves image quality in any case and improves inference speed when \(r > 30\%\) compared to the ToMe default (see Fig.~\ref{fig:exp_1_4}). Image generation speed seems unaffected by ToMe when \(r \leq 30\%\) (see Tab.~\ref{table:exp_1_4}).
-These results motivate the usage of token merging in both the self-attn and cross-attn modules as the new default for $768 \times 768$ images going forward.
+It is again visible that the use of ToMe in both the self-attn and cross-attn layer improves image quality in any case and improves inference speed when \(r > 30\%\), compared to the ToMe default (see Fig.~\ref{fig:exp_1_4}). Image generation speed seems unaffected by ToMe when \(r \leq 30\%\) (see Tab.~\ref{table:exp_1_4}).
+These results motivate token merging in both the self-attn and cross-attn modules as the new default for $768 \times 768$ images going forward.
 \begin{table}[!htb]
 \centering
 \begin{tabular}{c c c}
@@ -95,17 +95,17 @@ In this section, we want to expand the scope of our trials to smaller image size
 \label{fig:exp_2}
 \end{figure}\\
 %\newpage
-Generally, the speedup provided by ToMe noticeably decreases to ~25\% from ~50\% in the previous trials with \(768 \times 768\) images. ToMe even worsens image generation speed when \(r<20\%\), as the image generation process actually becomes slower by about 1 s/im at \(r=10\%\) (see Tab.~\ref{table:exp_2}).\\
+Generally, the speedup provided by ToMe noticeably decreases to $\sim$25\% from $\sim$50\% in the previous trials with \(768 \times 768\) images. ToMe even worsens image generation speed when \(r<20\%\), as the process actually becomes slower by $\sim$1 s/im at \(r=10\%\) (see Tab.~\ref{table:exp_2}).\\
 The inclusion of the cross-attn layer provides a consistent time improvement, but image quality gains are quite inconsistent.
 ToMe in self- and cross-attn yields better quality for \(r>10\%\) but the gap closes completely at \(r=40\%\) (see Fig.~\ref{fig:exp_2}).\\
-We conclude that using ToMe for such small images (e.g. $512 \times 512$ or smaller) is less practical than it is for larger images. It is especially inadvisable to be used with a small merge volume \((r<20\%)\), as there is no time gained in the diffusion process, but information is lost during merging. \\
+We conclude that using ToMe for such small images (e.g. $512 \times 512$ or smaller) is less practical than it is for larger images. It is especially inadvisable to be used with a small merge volume \((r<20\%)\), as there is no time gained in the generation process, but information is lost during merging. \\
 In consequence, we will not investigate the usage of ToMe on this scale any further. Neither will we investigate ToMe's effect on larger images due to hardware limitations.
 
 
 
 %\newpage
 \subsubsection*{3): Exploring different batch sizes}
-The third part of the experimental section examines, how different values for \(sx\) and \(sy\) influence the performance of ToMe on $768 \times 768$ images. As a reminder, \(sx\) and \(sy\) determine the size of the token batches, which are used to spread the \textbf{dst} tokens somewhat evenly across the image, with larger batches resulting in a less consistent distribution. Our new default of ToMe with token merging applied in both the self-attn and cross-attn layer will be used throughout this section.
+The third part of the experimental section examines how different values for \(sx\) and \(sy\) influence the performance of ToMe on $768 \times 768$ images. As a reminder, \(sx\) and \(sy\) determine the size of the token batches, which are used to spread the \textbf{dst} tokens somewhat evenly across the image, with larger batches resulting in a less consistent distribution. Our new default configuration with token merging applied in both the self-attn and cross-attn layer will be used throughout this section.
 
 
 
@@ -132,8 +132,8 @@ This limits our merge volume to 50\% but allows for better matches during the me
 \caption{FID and relative time compared to r=0\% for 3)}
 \label{fig:exp_3}
 \end{figure}\\
-Resizing the batches only has minor effects on image generation speed, as all three configurations consistently remain within one second of each other, although the setup with $3 \times 3$ batches does consistently perform the best in that regard (see Tab.~\ref{table:exp_3}).\\
-Image quality shows a noticeable improvement with smaller batch sizes. FID values for the ToMe setup using $3 \times 3$ batches slightly exceed the ones of the setup with $2 \times 2$ batches when \(r>10\%\), which in turn clearly exceed the ones of the version with $1 \times 2$ batches. (see Fig.~\ref{fig:exp_3}).
+Resizing the batches only has minor effects on image generation speed, as all three configurations consistently remain within one second of each other, although the setup with $3 \times 3$ batches does perform the best in that regard (see Tab.~\ref{table:exp_3}).\\
+Image quality shows a noticeable improvement with smaller batch sizes. FID values for the ToMe setup using $3 \times 3$ batches slightly exceed the ones of the setup with $2 \times 2$ batches (when \(r>10\%\)), which in turn clearly exceed the ones of the version with $1 \times 2$ batches. (see Fig.~\ref{fig:exp_3}).
 The gap closes towards \(r=50\%=r_{max}\), as every \textbf{src} token has to be merged when using $1 \times 2$ batches, regardless of how good of a match from \textbf{dst} is available.\\
 It can still be concluded that using the $1 \times 2$ batches to create an equal number of \textbf{src} and \textbf{dst} tokens yields the best performance (even at a minor speed discount), especially when \(r\) is not close to \(0\%\) or \(r_{max}\), while the usage of larger batches with a smaller \(\textbf{dst\%}\) is not advisable.
 \begin{table}[!htb]
@@ -151,7 +151,7 @@ It can still be concluded that using the $1 \times 2$ batches to create an equal
 %\newpage
 \subsubsection*{4): Putting it all together}
 Finally, we are comparing the most successful configurations from the past experiments. That means we are looking at \textbf{setup 1}: the original ToMe default by Bolya and Hofmann (black), \textbf{setup 2}: our new default with token merging expanded to the cross-attn layer from \(1.2\) and \(1.4\) (red), and \textbf{setup 3}: the new default but with $1 \times 2$ batches for token partitioning from \(3.2\) (blue).\\
-We expanded the image sets for the first two configurations to 1000 images per merge volume in \(1.4\), so we will do the same for the other one to enable examinations on a larger scale.
+We expanded the image sets for \textbf{setup 1} and \textbf{2} to 1000 images per merge volume in \(1.4\), so we will do the same for \textbf{setup 3} to enable examinations on a larger scale.
 \begin{figure}[!htb]
     \input{plots/plot7_fid}
     \input{plots/plot7_time}
@@ -166,11 +166,11 @@ Our discoveries regarding image quality are reinforced, with \textbf{setup 3} no
 %\newpage
 \subsubsection*{Summary}
 Firstly, the experiments we conducted support ToMe's effectiveness regarding image generation speedup. Inference time was cut in half while image quality remained great, although in some cases details and textures started to deteriorate for larger values of \(r\).\\
-Our results suggest that ToMe's performance can be improved by applying token merging in both the self-attn and cross-attn layer of the transformer. Furthermore, the best performance can be achieved by using $1 \times 2$ for token partitioning, bringing particularly great improvements to image quality when \(r\leq40\%\).\\
+Our results suggest that ToMe's performance can be improved by applying token merging in both the self-attn and cross-attn layer of the transformer. Furthermore, the best performance can be achieved by using $1 \times 2$ batches for token partitioning, bringing particularly great improvements to image quality when \(r\leq40\%\).\\
 Another important discovery is that token merging in the self-attn module is essential to unlocking speed improvements for image generation. On the other hand, using ToMe in the mlp layer seems to exclusively come at a disadvantage for image quality.\\
 Moreover, it is advantageous to create sufficiently large images when using ToMe in order to reap greater speed benefits. We showed that the time improvements with token merging noticeably decrease from >50\% for $768 \times 768$ images to only about 25\% for $512 \times 512$ images at \(r=60\%\) (see Tab.~\ref{table:exp_1_4},~\ref{table:exp_2}).\\
 Additionally, it was shown that strongly skewing the \textbf{src}-\textbf{dst}-ratio away from an equal distribution has negative effects on image quality as well (see Tab.~\ref{table:exp_3}).\\
-Another thing that stands out is that the speed advantage increases less when \(r\) becomes larger. E.g., switching from \(r=10\%\) to \(r=20\%\) usually results in a speed increase of more than 10\%, while switching from \(r=50\%\) to \(r=60\%\) only gains you about 5\% most of the time.
+Another thing that stands out is that the speed advantage increases less when \(r\) becomes larger. E.g., switching from \(r=10\%\) to \(r=20\%\) usually results in a speed increase of more than 10\%, while switching from \(r=50\%\) to \(r=60\%\) only gains about 5\% most of the time.
 \begin{table}[!htb]
 \centering
 \begin{tabular}{c c c}

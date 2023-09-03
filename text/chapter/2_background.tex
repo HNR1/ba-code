@@ -4,7 +4,7 @@
 
 \subsection{Stable Diffusion}
 Stable Diffusion is based on a special type of Diffusion Model called Latent Diffusion Model (LDM) \cite{Rombach_2022_CVPR}. LDMs are trained to create a desired image by repeatedly denoising an image initialised with random gaussian noise; this process is called reverse diffusion. Forward diffusion, which applies more and more noise at each step, is used during training, so the model learns to identify noise in an image.\\
-What separates LDMs from regular Diffusion Models is that they apply the diffusion process in a lower-dimensional latent space instead of the pixel-space. This greatly alleviates the need for extensive resources, especially when generating larger images. LDMs have three main components: \(1)\) the autoencoder, \(2)\) the U-Net and \(3)\) the text-encoder.
+What distinguishes LDMs from conventional Diffusion Models is that inference takes place within a lower-dimensional latent space, instead of the pixel-space. This greatly alleviates the need for extensive computational resources, especially when generating larger images. LDMs have three main components: \(1)\) the autoencoder, \(2)\) the U-Net and \(3)\) the text-encoder.
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]
@@ -16,13 +16,13 @@ What separates LDMs from regular Diffusion Models is that they apply the diffusi
 
 
 \subsubsection{The Autoencoder}
-A Variational Autoencoder (VAE) consists of two parts: the encoder and the decoder. "During latent diffusion training, the encoder is used to get the latent representations (latents) of the images for the forward diffusion process" \cite{patil2022stable}. The decoder conversely transforms the denoised latents, created by the U-Net, back into the pixel space at the end of the diffusion process. Only the decoder is used for the image generation process (see Fig.~\ref{fig:ldm}).
+A Variational Autoencoder (VAE) consists of two parts: the encoder and the decoder. "During latent diffusion training, the encoder is used to get the latent representations (latents) of the images for the forward diffusion process" \cite{patil2022stable}. The decoder conversely transforms the denoised latents, created by the U-Net, back into the pixel space at the end of the reverse diffusion process. Only the decoder is used during image generation (see Fig.~\ref{fig:ldm}).
 
 
 
 \subsubsection{The U-Net}
-The U-Net \cite{ronneberger2015u} is a type of Convolutional Neural Network (CNN) that is responsible for predicting the noise in the current sample image. The image generation process starts with a random sample image of gaussian noise. The U-Net then takes this sample \((latents)\) and predicts the noise residual \((noise\_pred)\) of the image. 
-This noise residual is partially \((sigma)\) removed in every step, until we end up with the final fully denoised image (see Fig.~\ref{fig:ldm}).
+The U-Net \cite{ronneberger2015u} is a type of Convolutional Neural Network (CNN) that is responsible for predicting the noise in the current sample image during inference. The image generation process starts with a sample image of random gaussian noise. The U-Net then takes this sample \((latents)\) and predicts the noise residual \((noise\_pred)\) of the image. 
+This noise residual is partially \((sigma)\) removed in every step, until it ends up with the final fully denoised image after \(n\) steps (see Fig.~\ref{fig:ldm}).
 \begin{lstlisting}[language=Python]
 latens = latents - sigma * noise_pred
 \end{lstlisting}
@@ -32,7 +32,7 @@ A further aspect that distinguishes the U-Net from an autoencoder are the skip c
 
 
 \subsubsection{The Text-Encoder}
-The text-encoder is a transformer-based encoder that converts the input prompt from a string to an embedding vector that captures the semantic meaning of text and can be interpreted by the U-Net. Stable Diffusion uses CLIP's \cite{radford2021learning} pre-trained text-encoder \href{https://huggingface.co/docs/transformers/model_doc/clip#transformers.CLIPTextModel}{CLIPTextModel} and thus avoids additional training of the text-encoder.
+The text-encoder is a transformer-based encoder that converts the input prompt from a string to an embedding vector that captures the semantic meaning of text and can be interpreted by the U-Net. Stable Diffusion uses the pre-trained text-encoder CLIPTokenizer \cite{radford2021learning} and thus avoids additional training of the text-encoder.
 
 
 
@@ -68,7 +68,7 @@ A multi-layer perceptron is a fully connected neural network. The mlp layer take
 
 
 \subsection{Fréchet-Inception-Distance}
-The Fréchet Inception Distance (FID) is a metric that is used to evaluate the quality of generated images. It provides a quantitative measure of similarity by calculating the distance between the distributions of feature vectors of two image datasets. The feature vectors are extracted from the Inception model and the mean and covariance of their distributions are calculated.\\
+The Fréchet Inception Distance (FID) is a metric that is used to evaluate the quality of generated images. It provides a quantitative measure of similarity by calculating the distance between the distributions of the feature vectors of two image datasets. The feature vectors are extracted from the Inception model and the mean and covariance of their distributions are calculated.\\
 "We call the Fréchet distance \(d(., .)\)
 between the Gaussian with mean \((m, C)\) obtained from \(p(.)\) and the Gaussian with mean \((m_w, C_w)\)
 obtained from \(p_w(.)\) the “Fréchet Inception Distance” (FID), which is given by:
@@ -89,7 +89,7 @@ Current code implementations such as \cite{Seitzer2020FID} use the model's third
 
 \subsubsection{Caveats}
 FID is statistically biased, with its bias growing inversely proportional to the size of the image set, and the bias also depending on the model used for feature extraction \cite{Chong_2020_CVPR}. This makes comparing specific FID values from different experiments impossible, when identical sample sizes or the use of the same model are not guaranteed.\\
-A further limitation of FID is the Inception model's compression of images to $299 \times 299$ pixels \cite{szegedy2016rethinking}. Thus, assessing the quality of larger images is additionally hindered as information about the images is lost by the compression.
+A further limitation of FID is the Inception model's compression of images to $299 \times 299$ pixels \cite{szegedy2016rethinking}. Thus, assessing the quality of larger images is additionally hindered as information about the images is lost through the compression.
 
 
 
