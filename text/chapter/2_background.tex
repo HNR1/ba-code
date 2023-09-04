@@ -32,7 +32,7 @@ A further aspect that distinguishes the U-Net from an autoencoder are the skip c
 
 
 \subsubsection{The Text-Encoder}
-The text-encoder is a transformer-based encoder that converts the input prompt from a string to an embedding vector that captures the semantic meaning of text and can be interpreted by the U-Net. Stable Diffusion uses the pre-trained text-encoder CLIPTokenizer \cite{radford2021learning} and thus avoids additional training of the text-encoder.
+The text-encoder is a transformer-based encoder that converts the input prompt from a string to an embedding vector that captures the semantic meaning of text and can be interpreted by the U-Net. Stable Diffusion uses the pre-trained text-encoder of the CLIPTokenizer \cite{radford2021learning} and thus avoids additional training of the text-encoder.
 
 
 
@@ -94,4 +94,6 @@ A further limitation of FID is the Inception model's compression of images to $2
 
 
 \subsection{What are Tokens?}
-Tokens are semantic units that can be processed by transformer-based models such as Stable Diffusion. Text, such as the prompt in image generation, is tokenized into words or subwords, which are then mapped to an embedding vector by the text-encoder. Image tokens capture discrete representations of their specific visual elements, with each token encoding a certain aspect of the image, such as a particular object, texture, color, or spatial region. This breakdown into smaller units is necessary for efficient computations and memory management, additionally enabling these algorithms to better capture patterns and relationships within the data.
+Tokens are semantic units that can be processed by transformer-based models such as Stable Diffusion. Text, such as the prompt in image generation, is tokenized into words or subwords, which are then mapped to an embedding vector by the text-encoder. Images are divided into a grid of patches. An image token captures discrete representations of a specific image patch's visual features, such as objects, shapes, textures, or colors. Positional tokens are also added to maintain the order or spatial relationships between tokens.
+This breakdown into smaller units is necessary for efficient computations and memory management, additionally enabling these algorithms to better capture patterns and relationships within the data.
+Tokenizers such as CLIP map images and text into a shared embedding space, allowing for multi-modal processing of tokens by the model.

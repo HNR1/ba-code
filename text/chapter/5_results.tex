@@ -54,7 +54,7 @@ The results of the default ToMe settings (black) again carry over from the previ
 \caption{FID and relative time compared to r=0\% for 1.3)}
 \label{fig:exp_1_3}
 \end{figure}\\
-The most striking result here is that no token merging in the self-attn layer corresponds to no image generation speedup at all, rather slowing the process down (see Tab.~\ref{table:exp_1_3}). 
+The most striking result here is that no token merging in the self-attn layer corresponds to no image generation speedup at all, rather slowing the process down (see Tab.~\ref{table:exp_1_3}). This strongly indicates that self-attention is the computational bottleneck of the transformer.\\
 The apparent improvements to image quality compared to the ToMe default consequently become negligible without any speed benefits, though it can be noted that token merging in only the cross-attn layer greatly outperforms token merging in both the cross-attn and mlp layer in terms of image quality (see Fig.~\ref{fig:exp_1_3}).\\
 We conclusively derive that ToMe without involvement of the self-attn layer does not accelerate the image generation process at all and can be considered redundant and therefore be disregarded. It can additionally be derived from \(1.1 - 1.3\) that token merging in the mlp layer has strong negative effects on image quality and, thus, can not be recommended.
 
